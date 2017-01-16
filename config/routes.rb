@@ -35,6 +35,12 @@ ActionController::Routing::Routes.draw do |map|
   connect_to_web map, ':web/source/:id/:rev', :controller => 'wiki', :action => 'source', :requirements => { :rev => /\d+/, :id => id_regexp}
   connect_to_web map, ':web/list/:category', :controller => 'wiki', :action => 'list', :requirements => { :category => /.*/}, :category => nil
   connect_to_web map, ':web/recently_revised/:category', :controller => 'wiki', :action => 'recently_revised', :requirements => { :category => /.*/}, :category => nil
+
+  # 2011-03-16 (ADH): Originating date.
+  # 2017-01-15 (ADH): Support for old I2 links, directed to equilalent Instiki page.s
+  #
+  connect_to_web map, ':web/pages/:id', :controller => 'i2', :action => 'pages', :requirements => {:id => id_regexp}
+
   connect_to_web map, ':web/:action/:id', :controller => 'wiki', :requirements => {:id => id_regexp}
   connect_to_web map, ':web/:action', :controller => 'wiki'
   connect_to_web map, ':web', :controller => 'wiki', :action => 'index'

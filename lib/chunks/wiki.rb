@@ -1,4 +1,4 @@
-require 'chunks/chunk'
+#require 'chunks/chunk'
 require 'itex_stringsupport'
 
 # Contains all the methods for finding and replacing wiki related links.
@@ -128,7 +128,19 @@ module WikiChunk
       separate_link_type
       separate_alias
       separate_anchor
-      separate_web
+
+      # 2011-03-11 (ADH): Originating date.
+      # 2017-01-15 (ADH): The ROOL Wiki has page titles with colons in and
+      #                   Wiki links include them. This worked in I2 as I2 had
+      #                   no inter-Book link support (inter-Web links in
+      #                   Instiki parlance). Since ROOL only has one Web so
+      #                   inter-web links aren't useful, disable the support
+      #                   for this link type so that ":" is no longer magic in
+      #                   a [[link like this]] (except for the specific cases
+      #                   which include files - see LINK_TYPE_SEPARATION).
+      #
+      # separate_web
+
       @unmask_text = @content.page_link(@web_name, @page_name, @anchor_name, @link_text, @link_type)
     end
 

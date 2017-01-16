@@ -179,7 +179,10 @@ module Sanitizer
           node.attributes.delete attr; next
         end
         if ATTR_VAL_IS_URI.include?(attr)
-          val_unescaped = val.unescapeHTML.as_bytes.gsub(/`|[\000-\040\177\s]+|\302[\200-\240]/n,'').downcase
+          # 2011-03-10 (ADH): Originating date.
+          # 2017-01-15 (ADH): Get rid of attempted UTF-8 hack; just rely on mb_chars
+          # val_unescaped = val.unescapeHTML.as_bytes.gsub(/`|[\000-\040\177\s]+|\302[\200-\240]/n,'').downcase
+          val_unescaped = val.unescapeHTML.mb_chars.downcase.to_s
           if val_unescaped =~ /^[a-z0-9][-+.a-z0-9]*:/ && !ALLOWED_PROTOCOLS.include?(val_unescaped.split(':')[0]) 
             node.attributes.delete attr; next
           end                        

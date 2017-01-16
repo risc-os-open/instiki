@@ -1,3 +1,11 @@
+# 2017-01-15 (ADH): Fix for Passenger, originating circa 2011.
+#
+# This must be done here rather than environment.rb so that it gets picked up
+# properly in Development mode, when the controller is re-read for each request
+# but the environment may not be (e.g. it isn't with Passenger).
+#
+require_dependency 'instiki_errors'
+
 # The filters added to this controller will be run for all controllers in the application.
 # Likewise will all the methods added be available for all controllers.
 class ApplicationController < ActionController::Base
