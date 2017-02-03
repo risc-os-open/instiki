@@ -4,7 +4,67 @@ ENV['RAILS_ENV'] = 'test'
 # File.expand_path can be removed if Ruby 1.9 is in use.
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'environment'))
 
-require 'test_help'
+
+
+
+require 'test/unit'
+require 'active_support/test_case'
+require 'action_controller/test_case'
+require 'action_dispatch/testing/integration'
+
+if defined?(Test::Unit::Util::BacktraceFilter) && ENV['BACKTRACE'].nil?
+  require 'rails/backtrace_cleaner'
+  Test::Unit::Util::BacktraceFilter.module_eval { include Rails::BacktraceFilterForTestUnit }
+end
+
+if defined?(MiniTest)
+  # Enable turn if it is available
+  begin
+    require 'turn'
+
+    Turn.config do |c|
+      c.natural = true
+    end
+  rescue LoadError
+  end
+end
+
+if defined?(ActiveRecord::Base)
+  require 'active_record/test_case'
+
+  class ActiveSupport::TestCase
+    include ActiveRecord::TestFixtures
+    self.fixture_path = "#{Rails.root}/test/fixtures/"
+
+    setup do
+      ActiveRecord::IdentityMap.clear
+    end
+  end
+
+  ActionDispatch::IntegrationTest.fixture_path = ActiveSupport::TestCase.fixture_path
+
+  def create_fixtures(*table_names, &block)
+    Fixtures.create_fixtures(ActiveSupport::TestCase.fixture_path, table_names, {}, &block)
+  end
+end
+
+class ActionController::TestCase
+  setup do
+    @routes = Rails.application.routes
+  end
+end
+
+class ActionDispatch::IntegrationTest
+  setup do
+    @routes = Rails.application.routes
+  end
+end
+
+
+
+
+
+#require 'test_help'
 require 'wiki_content'
 require 'url_generator'
 require 'digest/sha1'
@@ -37,11 +97,11 @@ class Test::Unit::TestCase
     @page = Page.find(@page.id)
     @wiki.webs[@web.name] = @web
   end
-  
+
   def setup_wiki_with_30_pages
     ActiveRecord::Base.silence do
       (1..30).each do |i|
-        @wiki.write_page('wiki1', "page#{i}", "Test page #{i}\ncategory: test", 
+        @wiki.write_page('wiki1', "page#{i}", "Test page #{i}\ncategory: test",
                          Time.local(1976, 10, i, 12, 00, 00), Author.new('Dema', '127.0.0.2'),
                          x_test_renderer)
       end
@@ -83,7 +143,7 @@ class ContentStub < String
   def url_generator
      StubUrlGenerator.new
   end
-     
+
   def page_link(*); end
 end
 
@@ -140,10 +200,10 @@ class StubUrlGenerator < AbstractUrlGenerator
     when :publish
       if known_file then %{<a class="existingWikiWord" title="#{description}" href="../published/#{link}">#{text}</a>}
       else %{<span class=\"newWikiWord\">#{text}</span>} end
-    else 
+    else
       if known_file
         %{<a class=\"existingWikiWord\" title="#{description}" href=\"../file/#{link}\">#{text}</a>}
-      else 
+      else
         %{<span class=\"newWikiWord\">#{text}<a href=\"../file/#{link}\">?</a></span>}
       end
     end
@@ -164,7 +224,7 @@ class StubUrlGenerator < AbstractUrlGenerator
         if web_address == 'instiki'
           %{<a class="existingWikiWord" href="../../#{web_address}/show/#{link}#{'#'+anchor_name if anchor_name}" #{title}>#{text}</a>}
         else
-          %{<a class="existingWikiWord" href="../show/#{link}#{'#'+anchor_name if anchor_name}" #{title}>#{text}</a>}        
+          %{<a class="existingWikiWord" href="../show/#{link}#{'#'+anchor_name if anchor_name}" #{title}>#{text}</a>}
         end
       else
         if web_address == 'instiki'
@@ -186,7 +246,7 @@ class StubUrlGenerator < AbstractUrlGenerator
     when :publish
       if known_pic then %{<img alt="#{text}" src="../file/#{link}" />}
       else %{<span class="newWikiWord">#{text}</span>} end
-    else 
+    else
       if known_pic then %{<img alt="#{text}" src="../file/#{link}" />}
       else %{<span class="newWikiWord">#{text}<a href="../file/#{link}">?</a></span>} end
     end
@@ -208,18 +268,18 @@ end
       href = CGI.escape(name)
       case mode.to_sym
       when :export
-        if known 
+        if known
           link << %{\n  <source src="files/#{CGI.escape(name)}"/>}
         end
       when :publish
         if known
           link << %{\n  <source src="../file/#{href}"/>}
         end
-      else 
-        if known 
+      else
+        if known
           link << %{\n  <source src="../file/#{href}"/>}
-        else 
-          link << %{ <span class="newWikiWord">#{name}<a href="#{href}">?</a></span>} 
+        else
+          link << %{ <span class="newWikiWord">#{name}<a href="#{href}">?</a></span>}
         end
       end
     end
@@ -242,22 +302,22 @@ end
     when :export
       if known_cdf
         cdf_div("files/#{CGI.escape(name)}", width, height, badge_path)
-      else 
+      else
         CGI.escape(name)
       end
     when :publish
       if known_cdf
         cdf_div(href, width, height, badge_path)
-      else 
-        %{<span class="newWikiWord">#{CGI.escape(name)}</span>} 
+      else
+        %{<span class="newWikiWord">#{CGI.escape(name)}</span>}
       end
-    else 
-      if known_cdf 
+    else
+      if known_cdf
         cdf_div(href, width, height, badge_path)
-      else 
-        %{<span class="newWikiWord">#{CGI.escape(name)}<a href="#{href}">?</a></span>} 
+      else
+        %{<span class="newWikiWord">#{CGI.escape(name)}<a href="#{href}">?</a></span>}
       end
-    end    
+    end
   end
 
   def cdf_div(s, w, h, b)
@@ -284,8 +344,8 @@ module Test
     module Assertions
       def assert_success(bypass_body_parsing = false)
         assert_response :success
-        unless bypass_body_parsing  
-          assert_nothing_raised(@response.body) { REXML::Document.new(@response.body) }  
+        unless bypass_body_parsing
+          assert_nothing_raised(@response.body) { REXML::Document.new(@response.body) }
         end
       end
     end
