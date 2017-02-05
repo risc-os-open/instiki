@@ -6,7 +6,7 @@ class Page < ActiveRecord::Base
   has_many :wiki_references, :order => 'referenced_name'
   has_one :current_revision, :class_name => 'Revision', :order => 'id DESC'
 
-  attr_accessible :locked_at, :locked_by, :name
+  attr_accessible :web, :locked_at, :locked_by, :name
 
   def name
     read_attribute(:name).as_utf8

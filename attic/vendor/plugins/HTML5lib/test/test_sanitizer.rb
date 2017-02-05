@@ -160,7 +160,7 @@ class SanitizeTest < Test::Unit::TestCase
 # This affects only NS4. Is it worth fixing?
 #  def test_javascript_includes
 #    input = %(<div size="&{alert('XSS')}">foo</div>)
-#    output = "<div>foo</div>"    
+#    output = "<div>foo</div>"
 #    check_sanitization(input, output, output, output)
 #  end
 

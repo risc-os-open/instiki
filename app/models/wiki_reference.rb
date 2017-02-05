@@ -1,5 +1,7 @@
 class WikiReference < ActiveRecord::Base
 
+  attr_accessible :referenced_name, :link_type
+
   LINKED_PAGE = 'L'
   WANTED_PAGE = 'W'
   REDIRECTED_PAGE = 'R'

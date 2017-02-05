@@ -10,11 +10,13 @@ class WikiFile < ActiveRecord::Base
   validates_length_of :file_name, :within=>1..50
   validates_length_of :description, :maximum=>255
 
+  validate :file_name_and_content_size
+
   def self.find_by_file_name(file_name)
     first(:conditions => ['file_name = ?', file_name])
   end
 
-  def validate
+  def file_name_and_content_size
     if file_name
       if ! WikiFile.is_valid?(file_name)
         errors.add("file_name", "is invalid. Only latin characters, digits, dots, underscores, " +

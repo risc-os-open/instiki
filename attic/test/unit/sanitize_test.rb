@@ -20,12 +20,12 @@ class SanitizeTest < Test::Unit::TestCase
   def check_sanitization(input, htmloutput, xhtmloutput, rexmloutput)
     assert_equal htmloutput, do_sanitize_xhtml(input)
   end
-  
+
   def rexml_doc(string)
     REXML::Document.new(
       "<div xmlns='http://www.w3.org/1999/xhtml'>#{string}</div>")
   end
-  
+
   def my_rex(string)
     sanitize_rexml(rexml_doc(string.to_utf8)).gsub(/\A<div xmlns="http:\/\/www.w3.org\/1999\/xhtml">(.*)<\/div>\Z/m, '\1')
   end
@@ -39,12 +39,12 @@ class SanitizeTest < Test::Unit::TestCase
     assert_equal(output, my_rex(input))
     assert_equal(output2, input.to_utf8)
   end
-  
+
   def test_sanitize_malformed_utf8
     input = "<p>\357elephant &AMP; \302ivory</p>"
     output = "<p>\357\277\275elephant &amp; \357\277\275ivory</p>"
     check_sanitization(input, output, output, output)
-  end    
+  end
 
   Sanitizer::ALLOWED_ELEMENTS.each do |tag_name|
     define_method "test_should_allow_#{tag_name}_tag" do
@@ -52,7 +52,7 @@ class SanitizeTest < Test::Unit::TestCase
       htmloutput  = "<#{tag_name.downcase} title='1'>foo &lt;bad&gt;bar&lt;/bad&gt; baz</#{tag_name.downcase}>"
       xhtmloutput = "<#{tag_name} title='1'>foo &lt;bad&gt;bar&lt;/bad&gt; baz</#{tag_name}>"
       rexmloutput = xhtmloutput
-      
+
       if %w[caption colgroup optgroup option tbody td tfoot th thead tr].include?(tag_name)
         htmloutput = "foo &lt;bad&gt;bar&lt;/bad&gt; baz"
         xhtmloutput = htmloutput
@@ -174,7 +174,7 @@ class SanitizeTest < Test::Unit::TestCase
     output = "<p><tspan>\360\235\224\270</tspan> a</p>"
     check_sanitization(input, output, output, output)
   end
-  
+
     JSON::parse(open(File.expand_path(File.join(File.dirname(__FILE__), '/../sanitizer.dat'))).read).each do |test|
       define_method "test_#{test['name']}" do
         check_sanitization(
