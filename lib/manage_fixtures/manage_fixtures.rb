@@ -18,7 +18,7 @@ def import_table_fixture(table)
     row = r[1]
     columns = []
     values = []
-  
+
     row.each_pair do |column, value|
       if column.to_sym
         columns << ActiveRecord::Base.connection.quote_column_name(column)
@@ -27,7 +27,7 @@ def import_table_fixture(table)
         p "Column not found" + column.to_s
       end
     end
-    
+
     insert_sql = "INSERT INTO #{table} (" + columns.join(', ') + ") VALUES (" + values.join(', ') + ")"
 
       begin
