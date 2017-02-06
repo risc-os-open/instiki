@@ -5,7 +5,10 @@ class Web < ActiveRecord::Base
 
   ## Security
 
-  attr_accessible :name, :address, :password
+  attr_accessible :name, :address, :password,
+                  :published, :markup, :color, :additional_style,
+                  :safe_mode, :brackets_only, :count_pages,
+                  :allow_uploads, :max_upload_size
 
   ## Associations
 
@@ -220,11 +223,11 @@ class Web < ActiveRecord::Base
     def validate_address
       if ['create_system', 'create_web', 'delete_web', 'delete_files', 'web_list', ''].include?(address)
          self.errors.add(:address, 'is not a valid address')
-        raise Instiki::ValidationError.new("\"#{address.purify.escapeHTML}\" #{errors.on(:address)}")
+        raise Instiki::ValidationError.new("\"#{address.purify.escapeHTML}\" #{errors.include?(:address)}")
       end
       unless address == CGI.escape(address)
         self.errors.add(:address, 'should contain only valid URI characters')
-        raise Instiki::ValidationError.new("#{self.class.human_attribute_name('address')} #{errors.on(:address)}")
+        raise Instiki::ValidationError.new("#{self.class.human_attribute_name('address')} #{errors.include?(:address)}")
       end
     end
 
