@@ -9,3 +9,4 @@ log
 secret
 storage/
 tmp/cache/assets
+tmp/pids/server.pid
