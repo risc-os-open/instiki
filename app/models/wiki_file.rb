@@ -1,7 +1,7 @@
 class WikiFile < ActiveRecord::Base
   belongs_to :web
 
-  attr_accessible :file_name, :description, :content
+  attr_accessible :web_id, :file_name, :description, :content
 
   before_save :write_content_to_file
   before_destroy :delete_content_file
@@ -26,8 +26,8 @@ class WikiFile < ActiveRecord::Base
       end
     end
 
-    if @web and @content
-      if (@content.size > @web.max_upload_size.kilobytes)
+    if web and @content
+      if (@content.size > web.max_upload_size.kilobytes)
         errors.add("content", "size (#{(@content.size / 1024.0).round} kilobytes) exceeds " +
             "the maximum (#{web.max_upload_size} kilobytes) set for this wiki")
       end

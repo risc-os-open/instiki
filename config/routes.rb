@@ -21,15 +21,15 @@ Instiki::Application.routes.draw do
   connect_to_web ':web/edit_web',                          :to => 'admin#edit_web'
   connect_to_web ':web/remove_orphaned_pages',             :to => 'admin#remove_orphaned_pages'
   connect_to_web ':web/remove_orphaned_pages_in_category', :to => 'admin#remove_orphaned_pages_in_category'
-  connect_to_web ':web/file/delete/:id',                   :to => 'file#delete',      :constraints => {:id => /[-._\w]+/}, :id => nil
-  connect_to_web ':web/files/pngs/:id',                    :to => 'file#blahtex_png', :constraints => {:id => /[-._\w]+/}, :id => nil
-  connect_to_web ':web/files/:id',                         :to => 'file#file',        :constraints => {:id => /[-._\w]+/}, :id => nil
+  connect_to_web ':web/file/delete/:id',                   :to => 'file#delete',      :constraints => { :id => /[-._\w]+/ }, :id => nil
+  connect_to_web ':web/files/pngs/:id',                    :to => 'file#blahtex_png', :constraints => { :id => /[-._\w]+/ }, :id => nil
+  connect_to_web ':web/files/:id',                         :to => 'file#file',        :constraints => { :id => /[-._\w]+/ }, :id => nil
   connect_to_web ':web/file_list/:sort_order',             :to => 'wiki#file_list',   :sort_order  => nil
-  connect_to_web ':web/import/:id',                        :to => 'file#import'
+  connect_to_web ':web/import',                            :to => 'file#import'
   connect_to_web ':web/login',                             :to => 'wiki#login'
   connect_to_web ':web/web_list',                          :to => 'wiki#web_list'
 
-  connect_to_web ':web/show/diff/:id',                     :to          => 'wiki#show',
+  connect_to_web ':web/show/diff/*id',                     :to          => 'wiki#show',
                                                            :mode        => 'diff',
                                                            :constraints => {:id => id_regexp}
 
@@ -37,15 +37,16 @@ Instiki::Application.routes.draw do
                                                            :mode        => 'diff',
                                                            :constraints => { :rev => /\d+/, :id => id_regexp}
 
-  connect_to_web ':web/revision/:id/:rev',                 :to => 'wiki#revision', :constraints => { :rev => /\d+/, :id => id_regexp}
-  connect_to_web ':web/source/:id/:rev',                   :to => 'wiki#source',   :constraints => { :rev => /\d+/, :id => id_regexp}
-  connect_to_web ':web/list/:category',                    :to => 'wiki#list',     :constraints => { :category => /.*/ }, :category => nil
+  connect_to_web ':web/revision/:id/:rev',                 :to => 'wiki#revision', :constraints => { :rev => /\d+/, :id => id_regexp }
+  connect_to_web ':web/source/:id/:rev',                   :to => 'wiki#source',   :constraints => { :rev => /\d+/, :id => id_regexp }
+  connect_to_web ':web/list/:category',                    :to => 'wiki#list',     :constraints => { :category => /.*/ },
+                                                                                   :category    => nil
 
   connect_to_web ':web/recently_revised/:category',        :to          => 'wiki#recently_revised',
-                                                           :constraints => { :category => /.*/},
+                                                           :constraints => { :category => /.*/ },
                                                            :category    => nil
 
-  connect_to_web ':web/:action/:id',                       :to => 'wiki', :constraints => {:id => id_regexp}
+  connect_to_web ':web/:action/*id',                       :to => 'wiki', :format => /html|xml/, :constraints => { :id => id_regexp }
   connect_to_web ':web/:action',                           :to => 'wiki'
   connect_to_web ':web',                                   :to => 'wiki#index'
 
