@@ -9,7 +9,7 @@ require 'itex_stringsupport'
 class SanitizerTest < Test::Unit::TestCase
 
   include Sanitizer
-  
+
   def setup
 
   end
@@ -34,7 +34,7 @@ class SanitizerTest < Test::Unit::TestCase
     input = "<p>\357elephant &AMP; \302ivory</p>".purify
     output = "".respond_to?(:force_encoding) ? "<p>elephant &amp; ivory</p>" : "<p>ephant &amp; vory</p>"
     check_sanitization(input, output, output, output)
-  end    
+  end
 
   Sanitizer::ALLOWED_ELEMENTS.each do |tag_name|
     define_method "test_should_allow_#{tag_name}_tag" do
@@ -42,7 +42,7 @@ class SanitizerTest < Test::Unit::TestCase
       htmloutput  = "<#{tag_name.downcase} title='1'>foo &lt;bad&gt;bar&lt;/bad&gt; baz</#{tag_name.downcase}>"
       xhtmloutput = "<#{tag_name} title='1'>foo &lt;bad&gt;bar&lt;/bad&gt; baz</#{tag_name}>"
       rexmloutput = xhtmloutput
-      
+
       if VOID_ELEMENTS.include?(tag_name)
         htmloutput = "<#{tag_name} title='1'/>foo &lt;bad&gt;bar&lt;/bad&gt; baz"
         xhtmloutput = htmloutput
@@ -140,7 +140,7 @@ class SanitizerTest < Test::Unit::TestCase
 # This affects only NS4. Is it worth fixing?
 #  def test_javascript_includes
 #    input = %(<div size="&{alert('XSS')}">foo</div>)
-#    output = "<div>foo</div>"    
+#    output = "<div>foo</div>"
 #    check_sanitization(input, output, output, output)
 #  end
 

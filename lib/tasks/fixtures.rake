@@ -1,45 +1,45 @@
-require Rails.root.join('vendor', 'plugins', 'manage_fixtures', 'lib', 'manage_fixtures.rb')
+require Rails.root.join('lib', 'manage_fixtures', 'manage_fixtures.rb')
 
 desc "use rake db:fixtures:export_using_query SQL=\"select * from foo where id='bar'\" FIXTURE_NAME=foo"
-namespace :db do  
+namespace :db do
   namespace :fixtures do
     task :export_using_query => :environment do
       write_yaml_fixtures_to_file(ENV['SQL'], ENV['FIXTURE_NAME'])
     end
   end
 end
- 
-desc 'use rake db:fixtures:export_for_tables TABLES=foos[,bars,lands] Create YAML dump fixtures for a specific table(s) from data in an existing database. Defaults to development database. Set RAILS_ENV to override. ' 
-namespace :db do  
+
+desc 'use rake db:fixtures:export_for_tables TABLES=foos[,bars,lands] Create YAML dump fixtures for a specific table(s) from data in an existing database. Defaults to development database. Set RAILS_ENV to override. '
+namespace :db do
   namespace :fixtures do
-    task :export_for_tables => :environment do 
-      sql = "SELECT * FROM %s" 
+    task :export_for_tables => :environment do
+      sql = "SELECT * FROM %s"
       tables = ENV['TABLES'].split(',')
-      ActiveRecord::Base.establish_connection 
-      tables.each do |table_name| 
+      ActiveRecord::Base.establish_connection
+      tables.each do |table_name|
         write_yaml_fixtures_to_file(sql % table_name, table_name)
-      end 
+      end
     end
   end
-end 
- 
- 
-desc ' Create YAML dump fixtures from data in an existing database. Defaults to development database. Set RAILS_ENV to override. ' 
-namespace :db do  
+end
+
+
+desc ' Create YAML dump fixtures from data in an existing database. Defaults to development database. Set RAILS_ENV to override. '
+namespace :db do
   namespace :fixtures do
-    task :export_all => :environment do 
-      sql = "SELECT * FROM %s" 
-      skip_tables = ["schema_info"] 
-      ActiveRecord::Base.establish_connection 
-      (ActiveRecord::Base.connection.tables - skip_tables).each do |table_name| 
-        i = "000" 
-        File.open(Rails.root.join('dump', 'fixtures', table_name + '.yml'), 'w' ) do |file| 
+    task :export_all => :environment do
+      sql = "SELECT * FROM %s"
+      skip_tables = ["schema_info"]
+      ActiveRecord::Base.establish_connection
+      (ActiveRecord::Base.connection.tables - skip_tables).each do |table_name|
+        i = "000"
+        File.open(Rails.root.join('dump', 'fixtures', table_name + '.yml'), 'w' ) do |file|
           write_yaml_fixtures_to_file(sql % table_name, table_name)
-        end 
-      end 
+        end
+      end
     end
   end
-end 
+end
 
 desc 'use rake db:fixtures:import_for_models MODELS=Foo[,Bar,Land] to import the YAML dump fixtures for a specific models from data in an existing database. Defaults to development database. Set RAILS_ENV to override. '
 namespace :db do

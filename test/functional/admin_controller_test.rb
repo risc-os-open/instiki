@@ -10,7 +10,6 @@ class AdminControllerTest < ActionController::TestCase
   fixtures :webs, :pages, :revisions, :system, :wiki_references
 
   def setup
-    require 'action_controller/test_process'
     @controller = AdminController.new
     @request    = ActionController::TestRequest.new
     @response   = ActionController::TestResponse.new
@@ -25,7 +24,7 @@ class AdminControllerTest < ActionController::TestCase
     @elephant = pages(:elephant)
     @web = webs(:test_wiki)
     @home = @page = pages(:home_page)
-    FileUtils.rm_rf("#{RAILS_ROOT}/webs/renamed_wiki1")
+    FileUtils.rm_rf("#{Rails.root}/webs/renamed_wiki1")
   end
 
   def test_create_system_form_displayed
@@ -37,11 +36,11 @@ class AdminControllerTest < ActionController::TestCase
   def test_create_system_form_submitted
     use_blank_wiki
     assert !@wiki.setup?
-    
-    process('create_system', 'password' => 'a_password', 'web_name' => 'My Wiki', 
+
+    process('create_system', 'password' => 'a_password', 'web_name' => 'My Wiki',
         'web_address' => 'my_wiki')
-      
-    assert_redirected_to :web => 'my_wiki', :controller => 'wiki', :action => 'new', 
+
+    assert_redirected_to :web => 'my_wiki', :controller => 'wiki', :action => 'new',
         :id => 'HomePage'
     assert @wiki.setup?
     assert_equal 'a_password', @wiki.system[:password]
@@ -56,29 +55,29 @@ class AdminControllerTest < ActionController::TestCase
     old_size = @wiki.webs.size
     assert @wiki.setup?
 
-    process 'create_system', 'password' => 'a_password', 'web_name' => 'My Wiki', 
+    process 'create_system', 'password' => 'a_password', 'web_name' => 'My Wiki',
         'web_address' => 'my_wiki'
 
     assert_redirected_to :web => @wiki.webs.keys.first, :controller => 'wiki', :action => 'show', :id => 'HomePage'
     assert_equal wiki_before, @wiki
     # and no new web should be created either
     assert_equal old_size, @wiki.webs.size
-    assert(@response.has_flash_object?(:error))
+    assert(flash[:error])
   end
 
   def test_create_system_no_form_and_wiki_already_initialized
     assert @wiki.setup?
     process('create_system')
     assert_redirected_to :web => @wiki.webs.keys.first, :controller => 'wiki', :action => 'show', :id => 'HomePage'
-    assert(@response.has_flash_object?(:error))
+    assert(flash[:error])
   end
 
 
   def test_create_web
     @wiki.system.update_attribute(:password, 'pswd')
-  
+
     process 'create_web', 'system_password' => 'pswd', 'name' => 'Wiki Two', 'address' => 'wiki2'
-    
+
     assert_redirected_to :web => 'wiki2', :controller => 'wiki', :action => 'new', :id => 'HomePage'
     wiki2 = @wiki.webs['wiki2']
     assert wiki2
@@ -88,17 +87,17 @@ class AdminControllerTest < ActionController::TestCase
 
   def test_create_web_default_password
     @wiki.system.update_attribute(:password, nil)
-  
+
     process 'create_web', 'system_password' => 'instiki', 'name' => 'Wiki Two', 'address' => 'wiki2'
-    
+
     assert_redirected_to :web => 'wiki2', :controller => 'wiki', :action => 'new', :id => 'HomePage'
   end
 
   def test_create_web_failed_authentication
     @wiki.system.update_attribute(:password, 'pswd')
-  
+
     process 'create_web', 'system_password' => 'wrong', 'name' => 'Wiki Two', 'address' => 'wiki2'
-    
+
     assert_redirected_to :controller => 'admin', :action => 'create_web'
     assert_nil @wiki.webs['wiki2']
   end
@@ -121,8 +120,8 @@ class AdminControllerTest < ActionController::TestCase
 
     process('edit_web', 'system_password' => 'pswd',
         'web' => 'wiki1', 'address' => 'renamed_wiki1', 'name' => 'Renamed Wiki1',
-        'markup' => 'markdown', 'color' => 'blue', 'additional_style' => 'whatever', 
-        'safe_mode' => 'on', 'password' => 'new_password', 'password_check' => 'new_password', 'published' => 'on', 
+        'markup' => 'markdown', 'color' => 'blue', 'additional_style' => 'whatever',
+        'safe_mode' => 'on', 'password' => 'new_password', 'password_check' => 'new_password', 'published' => 'on',
         'brackets_only' => 'on', 'count_pages' => 'on', 'allow_uploads' => 'on',
         'max_upload_size' => '300')
 
@@ -150,13 +149,13 @@ class AdminControllerTest < ActionController::TestCase
 
     process('edit_web', 'system_password' => 'pswd',
         'web' => 'wiki1', 'address' => 'renamed_wiki1', 'name' => 'Renamed Wiki1',
-        'markup' => 'markdown', 'color' => 'blue', 'additional_style' => 'whatever', 
-        'safe_mode' => 'on', 'password' => 'new_password', 'password_check' => 'old_password', 'published' => 'on', 
+        'markup' => 'markdown', 'color' => 'blue', 'additional_style' => 'whatever',
+        'safe_mode' => 'on', 'password' => 'new_password', 'password_check' => 'old_password', 'published' => 'on',
         'brackets_only' => 'on', 'count_pages' => 'on', 'allow_uploads' => 'on',
         'max_upload_size' => '300')
 
     assert_response :success
-    assert @response.has_template_object?('error')
+    assert @controller.instance_variable_get('@error')
     assert File.directory? Rails.root.join("webs", "wiki1", "files")
     assert !File.exist?(Rails.root.join("webs", "renamed_wiki1", "wiki1"))
     assert !File.exist?(Rails.root.join("webs", "renamed_wiki1"))
@@ -165,12 +164,12 @@ class AdminControllerTest < ActionController::TestCase
   def test_edit_web_opposite_values
     @wiki.system.update_attribute(:password, 'pswd')
     @web.save
-  
+
     process('edit_web', 'system_password' => 'pswd',
         'web' => 'wiki1', 'address' => 'renamed_wiki1', 'name' => 'Renamed Wiki1',
-        'markup' => 'markdown', 'color' => 'blue', 'additional_style' => 'whatever', 
+        'markup' => 'markdown', 'color' => 'blue', 'additional_style' => 'whatever',
         'password' => 'new_password', 'password_check' => 'new_password')
-    # safe_mode, published, brackets_only, count_pages, allow_uploads not set 
+    # safe_mode, published, brackets_only, count_pages, allow_uploads not set
     # and should become false
 
     assert_redirected_to :web => 'renamed_wiki1', :controller => 'wiki', :action => 'show', :id => 'HomePage'
@@ -188,37 +187,37 @@ class AdminControllerTest < ActionController::TestCase
   def test_edit_web_wrong_password
     process('edit_web', 'system_password' => 'wrong',
       'web' => 'wiki1', 'address' => 'renamed_wiki1', 'name' => 'Renamed Wiki1',
-      'markup' => 'markdown', 'color' => 'blue', 'additional_style' => 'whatever', 
+      'markup' => 'markdown', 'color' => 'blue', 'additional_style' => 'whatever',
       'password' => 'new_password')
-      
+
     #returns to the same form
     assert_response :success
-    assert @response.has_template_object?('error')
+    assert @controller.instance_variable_get('@error')
   end
 
   def test_edit_web_rename_to_already_existing_web_name
     @wiki.system.update_attribute(:password, 'pswd')
-    
+
     @wiki.create_web('Another', 'another')
     process('edit_web', 'system_password' => 'pswd',
       'web' => 'wiki1', 'address' => 'another', 'name' => 'Renamed Wiki1',
-      'markup' => 'markdown', 'color' => 'blue', 'additional_style' => 'whatever', 
+      'markup' => 'markdown', 'color' => 'blue', 'additional_style' => 'whatever',
       'password' => 'new_password', 'password_check' => 'new_password')
-      
+
     #returns to the same form
     assert_response :success
-    assert @response.has_template_object?('error')
+    assert @controller.instance_variable_get('@error')
   end
 
   def test_edit_web_empty_password
     process('edit_web', 'system_password' => '',
       'web' => 'wiki1', 'address' => 'renamed_wiki1', 'name' => 'Renamed Wiki1',
-      'markup' => 'markdown', 'color' => 'blue', 'additional_style' => 'whatever', 
+      'markup' => 'markdown', 'color' => 'blue', 'additional_style' => 'whatever',
       'password' => 'new_password')
-      
+
     #returns to the same form
     assert_response :success
-    assert @response.has_template_object?('error')
+    assert @controller.instance_variable_get('@error')
   end
 
 
@@ -228,9 +227,9 @@ class AdminControllerTest < ActionController::TestCase
     x_test_renderer(@web.page('liquor').revisions.last).display_content(true)
     orphan_page_linking_to_oak_and_redirecting_to_liquor = @wiki.write_page('wiki1', 'Pine',
         "Refers to [[Oak]] and to [[booze]].\n" +
-        "category: trees", 
+        "category: trees",
         Time.now, Author.new('TreeHugger', '127.0.0.2'), x_test_renderer)
-    
+
     r = process('remove_orphaned_pages', 'web' => 'wiki1', 'system_password_orphaned' => 'pswd')
 
     assert_redirected_to :controller => 'wiki', :web => 'wiki1', :action => 'list'
@@ -261,7 +260,7 @@ class AdminControllerTest < ActionController::TestCase
        @oak, pages(:smart_engine), pages(:that_way), @liquor]
     orphan_page_linking_to_oak = @wiki.write_page('wiki1', 'Pine',
         "Refers to [[Oak]].\n" +
-        "category: trees", 
+        "category: trees",
         Time.now, Author.new('TreeHugger', '127.0.0.2'), x_test_renderer)
 
     r = process('remove_orphaned_pages_in_category', 'web' => 'wiki1', 'category' => 'trees','system_password_orphaned_in_category' => 'pswd')
@@ -296,16 +295,16 @@ class AdminControllerTest < ActionController::TestCase
     assert_equal page_order, @web.select.sort,
         "Pages are not as expected: #{@web.select.sort.map {|p| p.name}.inspect}"
   end
-  
+
   def test_remove_orphaned_pages_empty_or_wrong_password
     @wiki.system[:password] = 'pswd'
-    
+
     process('remove_orphaned_pages', 'web' => 'wiki1')
     assert_redirected_to(:controller => 'admin', :action => 'edit_web', :web => 'wiki1')
-    assert @response.flash[:error]
+    assert flash[:error]
 
     process('remove_orphaned_pages', 'web' => 'wiki1', 'system_password_orphaned' => 'wrong')
     assert_redirected_to(:controller => 'admin', :action => 'edit_web', :web => 'wiki1')
-    assert @response.flash[:error]
+    assert flash[:error]
   end
 end
