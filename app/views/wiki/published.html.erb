@@ -1,0 +1,19 @@
+<%
+  @title = @page.plain_name
+  @hide_navigation = false
+  @style_additions = ".newWikiWord { background-color: white; font-style: italic; }"
+  @inline_style = false
+  @show_footer = true
+%>
+
+<%= @renderer.display_published %>
+
+<div class="byline">
+  <%= @page.revisions? ? "Revised" : "Created" %> on <%= format_date(@page.revised_at) %>
+  by
+  <%= author_link(@page, { :mode => (@link_mode || :show) }) %>
+</div>
+
+<div class="navigation navfoot">
+<span class="views"></span>
+</div>

@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0 plus SVG 1.1//EN" "http://www.w3.org/2002/04/xhtml-math-svg/xhtml-math-svg-flat.dtd" >
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>
+    <% if @page and (@page.name == 'HomePage') %>
+      <%= h(@web.name) %>
+    <% else @web %>
+      <%= @page.plain_name %> in <%= h @web.name %>
+    <% end %>
+  </title>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="robots" content="<%= @robots_metatag_value %>" />
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <title>
+    <% if @page and (@page.name == 'HomePage') and (%w( show published print ).include?(params['action'])) %>
+      <%= h(@web.name) + (@show_diff ? ' (changes)' : '') %>
+    <% elsif @web %>
+      <%= @title %> in <%= h @web.name %>
+    <% else %>
+      <%= @title %>
+    <% end %>
+  </title>
+
+  <%= javascript_include_tag 'application' %>
+
+  <% if @web %>
+    <%= auto_discovery_link_tag(:atom, {:controller => 'wiki', :web => @web.address, :action => 'atom_with_headlines'},
+          :title => 'Atom with headlines') %>
+    <%= auto_discovery_link_tag(:atom, {:controller => 'wiki', :web => @web.address, :action => 'atom_with_content'},
+          :title => 'Atom with full content') %>
+  <% end %>
+
+  <link type="text/css" rel="stylesheet" href="/css/risc_os_open_2024.css" media="all" />
+
+  <style type="text/css">
+    h1#pageName, div.info, .newWikiWord a, a.existingWikiWord, .newWikiWord a:hover, [actiontype="toggle"]:hover, #TextileHelp h3 {
+      color: #<%= @web ? @web.color : "393" %>;
+    }
+    <%= Rails.root.join('public', 'stylesheets', 'instiki.css').read if @inline_style %>
+  </style>
+  <%= stylesheet_link_tag 'instiki', :media => 'all'  unless @inline_style %>
+  <%= "<style type='text/css'>#{@style_additions}</style>" if @style_additions %>
+  <style type="text/css"><!--/*--><![CDATA[/*><!--*/
+    <%= @web ? @web.additional_style : '' %>
+  /*]]>*/--></style>
+
+  <%= stylesheet_link_tag 'syntax', :media => 'all' %>
+
+  <script type="text/javascript">
+  <!--//--><![CDATA[//><!--
+    function updateSize(elt, w, h) {
+       // adjust to the size of the user's browser area.
+       // w and h are the original, unadjusted, width and height per row/column
+        var parentheight = document.viewport.getHeight();
+        var parentwidth = $('Container').getWidth();
+        elt.writeAttribute({'cols': Math.floor(parentwidth/w)  - 1,
+                            'rows': Math.floor(parentheight/h) - 2 });
+        elt.setStyle({Width: parentwidth, Height: parentheight});
+    }
+
+    function resizeableTextarea() {
+    //make the textarea resize to fit available space
+      $$('textarea#content').each( function(textarea)  {
+        var w = textarea.getWidth()/textarea.getAttribute('cols');
+        var h = textarea.getStyle('lineHeight').replace(/(\d*)px/, "$1");
+        Event.observe(window, 'resize', function(){ updateSize(textarea, w, h) });
+        updateSize(textarea, w, h);
+        Form.Element.focus(textarea);
+      });
+    }
+
+    window.onload = function (){
+      resizeableTextarea();
+    }
+  //--><!]]>
+  </script>
+</head>
+
+<body>
+
+<div id="Container"><br>
+<textarea id='content' readonly='readonly' rows='24' cols='60' ><%= h(@page.content.purify) %></textarea>
+</div> <!-- Container -->
+
+</body>
+</html>

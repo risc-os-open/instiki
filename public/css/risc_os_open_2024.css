@@ -1,0 +1,777 @@
+/* RISC OS Open basic site stylesheet.
+ *
+ * (C) RISC OS Open Limited 2011, 2024
+ *
+ * For printing styles, see the end of this file.
+ */
+
+body
+{
+  font-family: homerton, tahoma, helvetica, sans-serif;
+  color: #333;
+  background: #dbdbdb;
+  margin: 0;
+  padding: 0;
+  font-size: 12pt;
+}
+
+/* "Push away" bottom-of-window footer CSS fragment start */
+html { height: 100%; }
+body { height: 100%; }
+#template_above_footer { min-height: 100%; }
+/* "Push away" bottom-of-window footer CSS fragment end */
+
+#template_above_footer
+{
+  background: #fff;
+}
+
+address
+{
+  font-style: normal;
+  padding-left: 2em;
+}
+
+code
+{
+  font-size: 11pt;
+}
+
+pre, pre code, code pre
+{
+  font-size: 10pt;
+}
+
+pre
+{
+  background: #eee;
+  border: 1px solid #bbb;
+  padding: 5px;
+  overflow: auto;
+}
+
+blockquote
+{
+  border: 1px solid #b8a6c4;
+  border-left: 3px solid #61377a;
+  border-right: 0;
+  background: #e2dae6;
+  padding: 1px 10px;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+blockquote p, blockquote blockquote
+{
+  margin: 0.5em 0;
+}
+
+/* Common heading styles and block behaviour */
+
+h1, h2, h3, h4, h5, h6, form, div
+{
+  margin:  0;
+  padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: 5px;
+}
+
+h3
+{
+  font: normal 125% homerton, tahoma, helvetica, sans-serif;
+  color: #61377a;
+}
+
+h2 ~ h3
+{
+  margin-top: 14px;
+}
+
+/* Common form element and form-related styles */
+
+input[type="text"], input[type="password"], textarea, select
+{
+  border: 1px solid #4e713e;
+  background: #fff;
+  padding: 3px;
+}
+
+textarea {
+  font-size: 100%;
+}
+
+input[type="submit"]
+{
+  /* border-radius: 6px; */ /* Valid, but the W3C CSS3 validator is buggy and complains - and has since 2006! */
+  -moz-border-radius:    6px;
+  -webkit-border-radius: 6px;
+
+  background: #eee url( /images/risc_os_open/button_fade.png ) top left repeat-x;
+  border: 2px solid #e5e5e5;
+
+  /* Some browsers reset the font family in button elements, so it must be
+   * explicitly restated here.
+   */
+
+  font-family: homerton, tahoma, helvetica, sans-serif;
+
+  font-size: 11pt;
+  line-height: 100%;
+  text-decoration: none;
+  font-weight: bold;
+  color: #4e713e;
+  cursor: pointer;
+  padding: 5px 9px 7px 9px;
+  margin: 1px 0; /* Stop vertically stacked buttons from touching */
+}
+
+input[type="submit"]:hover {
+  background-color: #e6efc2;
+  border-color: #c6d880;
+  color: #4c7c2e;
+
+  box-shadow:         0px 0px 4px #888;
+  -moz-box-shadow:    #888 0 0 4px;
+  -webkit-box-shadow: #888 0 0 4px;
+}
+
+input.template_donate
+{
+  width: 110px;
+  height: 23px;
+  border: none;
+}
+
+input.template_buy
+{
+  border: none;
+}
+
+div.template_donate, div.template_buy
+{
+  text-align: center;
+}
+
+img.template_donate, img.template_buy
+{
+  position: fixed;
+  top: 0;
+  left: 0;
+  visibility: hidden;
+}
+
+div.template_sidebar_node form
+{
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Common link styles */
+
+a
+{
+  text-decoration: none;
+  border-bottom: 1px dotted;
+  padding: 0;
+  margin: 0;
+  color: #28477a;
+}
+
+a:hover
+{
+  background: #dadfe7;
+  border-bottom: 1px solid;
+}
+
+a:visited
+{
+  color: #5b6370;
+}
+
+a img, a:hover img
+{
+  border: none;
+}
+
+a.img, a:hover.img
+{
+  background: transparent;
+  border-bottom: none;
+}
+
+.powered,
+.powered img,
+a.powered,
+a.powered:hover
+{
+  border: none;
+  background: none;
+}
+
+/* Major functional blocks */
+
+#template_header_2024,
+#template_navigation,
+#template_main,
+#template_footer_2024
+{
+  clear: both;
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+/* Header */
+
+#template_header_2024
+{
+  box-sizing: border-box;
+  width: 100%;
+  height: 140px;
+  min-width: 640px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  background: #283556 url( /images/risc_os_open/rool_header_swirl.png ) center center no-repeat;
+  background-size: cover;
+}
+
+div#template_header_cog {
+  display: inline-block;
+  float: right;
+  width: 90px;
+  height: 90px;
+  margin-top: -5px;
+  background: url( /images/risc_os_open/rool_header_cog.png ) center center no-repeat;
+  background-size: contain;
+  filter: drop-shadow(0px 0px 3px #ffffff);
+}
+
+@media (min-resolution: 2x) {
+  div#template_header_cog {
+    background: url( /images/risc_os_open/rool_header_cog_2x.png ) center center no-repeat;
+    background-size: contain;
+  }
+}
+
+div#template_header_rool_text {
+  width: 100%;
+  height: 52px;
+  background: url( /images/risc_os_open/rool_header_text.png ) center left no-repeat;
+  background-size: contain;
+  filter: drop-shadow(0px 0px 2px #000000);
+}
+
+@media (min-resolution: 2x) {
+  div#template_header_rool_text {
+    background: url( /images/risc_os_open/rool_header_text_2x.png ) center left no-repeat;
+    background-size: contain;
+  }
+}
+
+div#template_header_rool_tagline {
+  margin-top: 12px;
+  font-family: homerton, tahoma, helvetica, sans-serif;
+  font-size: 15.6px;
+  line-height: 15.6px;
+  color: white;
+}
+
+/* Navigation bar */
+
+#template_navigation
+{
+  white-space: nowrap;
+  background: #c6e7b6;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  margin-bottom: 30px;
+}
+
+#template_navigation_main
+{
+  font-weight: bold;
+  font-size: 80%;
+}
+
+#template_navigation_hub
+{
+  float: right;
+  padding: 7px 0;
+}
+
+@media (max-width: 680px) {
+  #template_navigation_main,
+  #template_navigation_hub {
+    float: clear;
+  }
+}
+
+a.template_navigation
+{
+  color: #334A28;
+  border: 0;
+  padding: 10px 16px;
+  border-right: 1px solid #4f733e;
+}
+
+a.template_navigation:first-child {
+  border-left: 1px solid #4f733e;
+}
+
+a.template_navigation:hover
+{
+  background: #4f733e;
+  color: #fff;
+}
+
+#template_navigation_main a.template_navigation
+{
+  display: inline-block;
+}
+
+span.template_navigation_divider
+{
+  display: none;
+}
+
+/* Main content area */
+
+#template_main
+{
+  display: table;
+  position: relative;
+  left: 5%;
+  width: 90%;
+  padding: 0 0 170px 0; /* 140px (height of footer) + 30px padding; see below */
+  background: #fff;
+}
+
+/* Main body content */
+
+#template_body
+{
+  display: table-cell;
+}
+
+nav.pagy {
+  display: inline-block;
+  margin: 10px 0;
+}
+
+nav.pagy a {
+  display: inline-block;
+  border: 1px solid #ddd;
+  border-right: none;
+  padding: 5px;
+  width: 1em;
+  text-align: center;
+}
+
+nav.pagy a:last-child {
+  border-right: 1px solid #ddd;
+}
+
+nav.pagy a.current {
+  font-weight: bold;
+}
+
+nav.pagy *[aria-disabled="true"] {
+  color: #bbb;
+}
+
+nav.pagy *[aria-disabled="true"]:hover {
+  background: none;
+}
+
+/* Sidebar */
+
+#template_sidebar
+{
+  display: table-cell;
+  width: 230px;
+  padding-left: 40px;
+  background: #fff;
+}
+
+div.template_sidebar_static
+{
+  font-size: 80%;
+}
+
+div.template_sidebar_node h3
+{
+  clear:      both; /* See ROD logo floated element below */
+  padding:    6px 0;
+  background: #dbdbdb url( /images/risc_os_open/top_fade.png ) top left repeat-x;
+  text-align: center;
+  color:      #000;
+  font-size:  90%;
+}
+
+div.template_sidebar_node > ul:last-child
+{
+  margin-bottom: 0;
+}
+
+div.template_sidebar_node li
+{
+  margin-left: -20px;
+  font-size: 90%;
+}
+
+/* ROD logo in sidebar */
+
+span#template_rod_logo
+{
+  display: block;
+  float: right;
+  width: 60px;
+  height: 75px;
+  background: url( /images/third_party/ROD-Shield.jpg ) 0 0 no-repeat;
+  margin-left: 5px;
+}
+
+/* Footer */
+
+#template_footer_2024
+{
+  box-sizing: border-box;
+  width: 100%;
+
+  /* "Push away" bottom-of-window footer CSS fragment start */
+  position: relative;
+  height: 140px;
+  margin-top: -140px; /* Must be negative element total ("outer") height */
+  /* "Push away" bottom-of-window footer CSS fragment end */
+
+  padding-top: 30px;
+  background: #283556 url( /images/risc_os_open/rool_header_swirl.png ) center center no-repeat;
+  background-size: cover;
+
+  color: #fff;
+  font-size: 15.6px;
+}
+
+#template_footer_links_theme
+{
+  float: left;
+}
+
+#template_footer_links_powered
+{
+  text-align: right;
+}
+
+#template_footer_2024 span.template_navigation_divider
+{
+  display: inline;
+}
+
+#template_footer_2024 a,
+#template_footer_2024 a.template_navigation,
+#template_footer_2024 a:visited
+#template_footer_2024 a.template_navigation:visited
+{
+  border: none;
+  border-bottom: 1px dotted;
+  padding: 0;
+  margin: 0;
+  color: #fff;
+  font-weight: bold;
+}
+
+#template_footer_2024 a:hover
+{
+  color: #283556;
+  background: #fff;
+  border-bottom: 1px solid white;
+}
+
+#template_footer_2024 .powered,
+#template_footer_2024 .powered img,
+#template_footer_2024 a.powered,
+#template_footer_2024 a.powered:hover
+{
+  border: none;
+  background: none;
+}
+
+/* Generic flash notification styles */
+
+div.flash > h2 {
+  margin: 10px 40px 30px 0;
+  padding: 15px;
+
+  border-radius: 9px;
+
+  font-weight: normal;
+}
+
+div.flash > h2.info,
+div.flash > h2.notice {
+  border-color: #c3efc3;
+  background-color: #e3ffe3;
+}
+
+div.flash > h2.attention {
+  border-color: #d4c8bc;
+  background-color: #ffe8cc;
+}
+
+div.flash > h2.alert,
+div.flash > h2.error {
+  border-color: #dfc3c3;
+  background-color: #ffe3e3;
+}
+
+/* Highlight errors within form submissions */
+
+.fieldWithErrors {
+  padding: 2px;
+  background-color: red;
+  display: table;        /* For MSIE 6, better than nothing */
+  display: inline-block; /* For less useless browsers...!   */
+}
+
+#errorExplanation {
+  width: 400px;
+  border: 2px solid red;
+  padding: 7px;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+}
+
+#errorExplanation h2 {
+  text-align: left;
+  font-weight: bold;
+  padding: 5px 5px 5px 15px;
+  font-size: 12px;
+  margin: -7px;
+  background-color: #c00;
+  color: #fff;
+}
+
+#errorExplanation p {
+  color: #333;
+  margin-bottom: 0;
+  padding: 5px;
+}
+
+#errorExplanation ul li {
+  font-size: 12px;
+  list-style: square;
+}
+
+/* Breadcrumb trails */
+
+.breadcrumbs
+{
+  margin-top: 5px;
+  border-top: 1px solid #e5ffd4;
+}
+
+.breadcrumbs ul
+{
+  margin: 0 0 5px 0;
+  padding: 0;
+}
+
+.breadcrumbs ul li
+{
+  display:   inline;
+  font-size: 80%;
+  color:     #333;
+  margin:    0;
+  padding:   0;
+}
+
+/* Component list tables */
+
+#template_body_content table.parsed_directory_listing
+{
+  table-layout:    auto;
+  border-collapse: collapse;
+  margin:          0 0 20px 0;
+  padding:         0;
+}
+
+table.parsed_directory_listing td,
+table.parsed_directory_listing th
+{
+  white-space: nowrap;
+  padding: 10px;
+}
+
+table.parsed_directory_listing td.can_wrap
+{
+  white-space: normal;
+}
+
+table.parsed_directory_listing tr.even
+{
+  background: #eee;
+}
+
+div.parsed_directory_listing_datestamp
+{
+  margin-top: 5px;
+  font-size: 70%;
+}
+
+div.parsed_directory_listing_md5
+{
+  margin-top: 3px;
+  font-size: 55%;
+}
+
+/* Bordered tables */
+
+#template_body_content table.bordered {
+  border-collapse:collapse;
+  margin-bottom: 20px;
+  border: 1px solid #888;
+  width: 100%;
+}
+
+#template_body_content table.bordered th {
+  border: 1px solid #555;
+  background: #f0f0f0;
+  font-weight: bold;
+  padding: 4px;
+}
+
+#template_body_content table.bordered td {
+  border: 1px solid #ccc;
+  padding: 4px;
+}
+
+/* Don't let images make the body column too wide; scale them instead */
+
+#template_body_content img
+{
+  max-width: 100%;
+}
+
+/* CVS revisions and SVN changesets */
+
+div.log,
+div.cvslog2web_p_entry div.cvslog2web_message
+{
+  background-color: #ffc;
+  border:           1px solid #ccc;
+  margin-bottom:    10px;
+}
+
+div.log p
+{
+  margin: 10px;
+}
+
+div.log-small
+{
+  margin: 0 0 0 20px;
+}
+
+div.log-small p
+{
+  font-size: 80%;
+}
+
+ul.changes,
+div.cvslog2web_p_entry div.cvslog2web_filelist
+{
+  list-style: none;
+  margin-top: 10px;
+  padding:    0;
+  font-size:  80%;
+  color:      #9a9a9a;
+}
+
+ul.changes li.change-name
+{
+  color: #666;
+}
+
+/*****************************************************************************\
+ * Browser-specific styles: Firefox
+\*****************************************************************************/
+
+/* Firefox 5, 12 and 17 (!) all position a <canvas> element inside a <div>
+ * incorrectly on this site.
+ */
+
+div > canvas { left: 0; }
+
+/*****************************************************************************\
+ * Browser-specific styles: NetSurf
+\*****************************************************************************/
+
+/* Help NetSurf get sizes right, reducing page reformatting. Problems with
+ * image sizing, even when width and height is specified in HTML, have long
+ * existed in the browser. Harmless for other browsers.
+ *
+ * Suggested by M.Drake, 2011-03-18:
+ *
+ *   https://www.riscosopen.org/forum/forums/1/topics/591?page=2
+ */
+
+#template_navigation_hub > a > img
+{
+  display: block;
+  margin-left: auto;
+  margin-right: 0;
+}
+
+/*****************************************************************************\
+ * Printing specialisations
+\*****************************************************************************/
+
+/* The use of "!important" makes sure that the rules take precedence for
+ * matching elements even if there is a more specific rule above, which would
+ * otherwise have taken precedence instead.
+ */
+
+@media print {
+  html,
+  body
+  {
+    height: auto !important;
+  }
+
+  #template_above_footer
+  {
+    min-height: 0 !important;
+  }
+
+  #template_navigation,
+  .template_navigation,
+  .template_navigation_divider,
+  #template_sidebar
+  {
+    display: none !important;
+  }
+
+  input[type="submit"],
+  #template_header_2024,
+  #template_footer_2024
+  {
+    background: none !important;
+  }
+
+  a, #template_footer_2024 a
+  {
+    border-bottom: #ddd 1px dashed;
+  }
+
+  a img
+  {
+    border-bottom: none !important;
+  }
+
+  a:visited
+  {
+    color: #28477a !important;
+  }
+}

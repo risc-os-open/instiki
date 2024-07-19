@@ -1,0 +1,27 @@
+<%
+  def list_item(text, link_options, description, accesskey = nil)
+    link_options[:controller] = 'wiki'
+    link_options[:web] = @web.address
+    link_to_unless_current(text, link_options, :title => description, :accesskey => accesskey) {
+      content_tag('b', text, 'title' => description, 'class' => 'navOn')
+    }
+  end
+%>
+
+<div class="navigation">
+  <ul>
+<% if params['action'] != 'published' then %>
+    <li><%= list_item 'Home Page', {:action => 'show', :id => 'HomePage'}, 'Documentation home', 'H' %></li>
+    <li><%= list_item 'All Pages', {:action => 'list'}, 'Alphabetically sorted list of pages', 'A' %></li>
+    <li><%= list_item 'Recently Revised', {:action =>'recently_revised'}, 'Pages sorted by when they were last changed', 'U' %></li>
+    <li><%= list_item 'Authors', {:action => 'authors'}, 'Who wrote what' %></li>
+    <li><%= list_item 'Feeds', {:action => 'feeds'}, 'Subscribe to changes by Atom' %></li>
+<%   if hubssolib_logged_in? && hubssolib_authorized?( :export, WikiController ) %>
+    <li><%= list_item 'Export', {:action => 'export'}, 'Download a zip with all the pages in this wiki', 'X' %></li>
+<%   end %>
+<% else %>
+    <li><%= list_item 'Home Page', {:action => 'published', :id => 'HomePage'}, 'Documentation home', 'H' %></li>
+    <li><%= list_item 'Feeds', {:action => 'feeds'}, 'Subscribe to changes by Atom' %></li>
+<% end%>
+  </ul>
+</div>

@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="robots" content="<%= @robots_metatag_value %>" />
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <title>
+      <% if @page and (@page.name == 'HomePage') and (%w( show published print ).include?(params['action'])) %>
+        <%= h(@web.name) + (@show_diff ? ' (changes)' : '') %>
+      <% elsif @web %>
+        <%= @title %> in <%= h @web.name %>
+      <% else %>
+        <%= @title %>
+      <% end %>
+    </title>
+
+    <%= javascript_include_tag 'application' %>
+
+    <% if @web %>
+      <%= auto_discovery_link_tag(:atom, {:controller => 'wiki', :web => @web.address, :action => 'atom_with_headlines'},
+            :title => 'Atom with headlines') %>
+      <%= auto_discovery_link_tag(:atom, {:controller => 'wiki', :web => @web.address, :action => 'atom_with_content'},
+            :title => 'Atom with full content') %>
+    <% end %>
+
+    <link type="text/css" rel="stylesheet" href="/css/risc_os_open_2024.css" media="all" />
+    <%= stylesheet_link_tag 'instiki', :media => 'all' %>
+    <%= stylesheet_link_tag 'syntax',  :media => 'all' %>
+  </head>
+
+  <body>
+    <%= render 'shared/fixed_header' %>
+
+    <div id="template_main">
+
+      <!-- Main body content -->
+
+      <div id="template_body">
+        <div id="template_body_content">
+          <div id="Container">
+            <div id="Content">
+              <%= apphelp_flash() %>
+
+              <% if @error %>
+                <div class="errorExplanation"><%= ( escape_preserving_linefeeds(@error) ).html_safe %></div>
+              <% end %>
+
+              <% if @page and (@page.name == 'HomePage') and %w( show published print ).include?(action_name) %>
+                <h1 id="pageName">
+                  <%= h(@web.name) + (@show_diff ? ' (changes)' : '') %>
+                </h1>
+              <% elsif (@title.blank? == false) %>
+                <h1 id="pageName">
+                  <%= @title %>
+                </h1>
+              <% elsif @web %>
+                <h1 id="pageName">
+                  <span class="webName"><%= h(@web.name) %></span> <%= (@show_diff ? ' (changes)' : '') %>
+                </h1>
+              <% end %>
+
+              <%= yield %>
+            </div> <!-- Content -->
+          </div> <!-- Container -->
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+
+      <div id="template_sidebar">
+        <div id="template_sidebar_content">
+          <% if params['action'] != 'published' && @web.present? %>
+            <div class="template_sidebar_node" id="search">
+              <h3>Search the Wiki</h3>
+
+              <p />
+              <%= render partial: 'search' %>
+            </div>
+          <% end %>
+
+          <%= render 'shared/fixed_sidebar' %>
+
+          <% unless @web.nil? || @hide_navigation %>
+            <p />
+            <div class="template_sidebar_node">
+              <h3>Navigation</h3>
+              <%= render partial: 'navigation' %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div id="template_main_block_end"></div>
+    </div>
+
+    <%= render 'shared/fixed_footer' %>
+  </body>
+</html>

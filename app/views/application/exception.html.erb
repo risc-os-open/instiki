@@ -1,0 +1,18 @@
+<% if Rails.env.production? %>
+  <h1>Internal error</h1>
+  <p>
+    Sorry! Something went wrong. Please contact ROOL if this error persists by
+    <a href="mailto:webmaster@riscosopen.org">e-mailing <code>webmaster@riscosopen.org</code></a>.
+  </p>
+<% else %>
+  <h1>500 <%= exception.class %></h1>
+  <h2><%= exception.message %></h2>
+  <p>
+    Regenerate this error twice in rapid successful for default debug error handling.
+  </p>
+  <p>
+    <code>
+      <%= exception.backtrace.map { | line | ERB::Util.h(line) }.join('<br>').html_safe() %>
+    </code>
+  </p>
+<% end %>

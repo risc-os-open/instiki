@@ -1,0 +1,91 @@
+<%
+  @title = "Editing #{@page.name.escapeHTML}".html_safe
+  @content_width = 720
+  @hide_navigation = true
+%>
+
+<h2>Edit page</h2>
+
+<p />
+<table cellspacing="0" cellpadding="0" border="0" style="border: none; text-align: left; width: auto;">
+  <tr>
+    <th style="border: none; background: none; padding: 0 5px 0 0;">Links:</th>
+    <td style="border: none; padding: 0;">For links, images and so-on please use <a href="../show/Wiki" target="_blank">Wiki syntax</a>.</td>
+  </tr>
+  <tr>
+    <th style="border: none; background: none; padding: 0 5px 0 0;">Markup:</th>
+    <td style="border: none; padding: 0;">To mark up everything else please use <a href="http://textile-lang.com/" target="_blank">Textile</a>.</td>
+  </tr>
+</table>
+
+	<%= form_tag({ :action => 'save', :web => @web.address, :id => @page.name },
+	             { 'id' => 'editForm', 'method' => 'post', 'onsubmit' => 'cleanAuthorName()',
+	               'accept-charset' => 'utf-8' }) do %>
+	   <div>
+		<textarea name="content" id="content" rows="24" cols="60"><%= h(flash[:content] ||
+                         (params['content'] ?  params['content'] : @page.content).purify) %></textarea>
+<% if @page_name != 'HomePage' %>
+	   <p>
+	      <%= check_box_tag :alter_title, value = "1", checked=false,
+	         'onchange' => "toggleVisibility();" %> <label for="alter_title">Change page name.</label><br/>
+	      <span id="title_change" style="display:none"><label for="new_name">New name:</label> <%= text_field_tag :new_name, h(@page.name.purify),
+			        :onblur => "addRedirect();"  %></span>
+	   </p>
+<% else %>
+       <%= hidden_field_tag 'new_name', @page_name %>
+<% end%>
+		<div id="editFormButtons">
+			<input type="submit" value="Submit" accesskey="s"/>
+<%
+   if false # 2011-03-14 (ADH): Hub integration - author comes from logged in user name
+%>
+			as
+			<%= text_field_tag :author, h(@author.purify),
+			        :onfocus => "this.value == 'AnonymousCoward' ? this.value = '' : true;",
+			        :onblur  => "this.value == '' ? this.value = 'AnonymousCoward' : true" %>
+<% end %>
+			|
+			<span>
+				<%= link_to('Cancel', {:web => @web.address, :action => 'cancel_edit', :id => @page.name},
+				      {:accesskey => 'c'}) %>
+                <span class="unlock">(unlocks page)</span>
+			</span>
+		</div>
+	   </div>
+	<% end %>
+
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+function toggleVisibility() {
+  var span = document.getElementById('title_change');
+  if (span.style.display =='inline') {
+     span.style.display ='none';
+     document.getElementById('new_name').value = "<%= escape_javascript(@page.name) %>";
+     var content = document.getElementById('content').value
+     document.getElementById('content').value = content.replace(/\[\[!redirects <%= Regexp.escape(@page.name).gsub('/', '\\/') %>\]\]\n/, '')
+     }
+  else
+     span.style.display ='inline'
+}
+
+function addRedirect(){
+  var e = document.getElementById('new_name').value;
+  if ( e != "<%= escape_javascript(@page.name) %>" && e != '') {
+    var content = document.getElementById('content');
+    content.value = '[[!redirects <%= escape_javascript(@page.name) %>]]\n' + content.value
+    }
+}
+
+function cleanAuthorName() {
+  if (document.getElementById('authorName').value == "") {
+    document.getElementById('authorName').value = 'AnonymousCoward';
+  }
+}
+
+document.forms["editForm"].elements["content"].focus();
+
+<% if @web.markup.to_s == 'markdown' %>
+  setupSVGedit('/svg-edit/editor/svg-editor.html');
+<% end %>
+//--><!]]>
+</script>
