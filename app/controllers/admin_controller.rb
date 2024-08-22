@@ -31,8 +31,12 @@ class AdminController < ApplicationController
       @wiki.setup(params['password'], params['web_name'], params['web_address'])
       flash[:info] = "Your new wiki '#{params['web_name']}' is created!\n" +
           "Please edit its home page and press Submit when finished."
-      redirect_to :web => params['web_address'], :controller => 'wiki', :action => 'new',
-          :id => 'HomePage'
+      redirect_to(
+        web: params['web_address'],
+        controller: 'wiki',
+        action:     'new',
+        id:         'HomePage'
+      )
     else
       # no form submitted -> go to template
     end
@@ -40,21 +44,25 @@ class AdminController < ApplicationController
 
   def create_web
     if params['address']
-      return unless is_post
+      return unless is_post # NOTE EARLY EXIT
       # form submitted
       if @wiki.authenticate(params['system_password'])
         begin
           @wiki.create_web(params['name'], params['address'])
           flash[:info] = "New web '#{params['name']}' successfully created."
-          redirect_to :web => params['address'], :controller => 'wiki', :action => 'new',
-              :id => 'HomePage'
+          redirect_to(
+            web:        params['address'],
+            controller: 'wiki',
+            action:     'new',
+            id:         'HomePage'
+          )
         rescue InstikiErrors::ValidationError => e
           @error = e.message
           # and re-render the form again
         end
       else
         flash[:error] = "System Password incorrect. Try again."
-        redirect_to :controller => 'admin', :action => 'create_web'
+        redirect_to(controller: 'admin', action: 'create_web')
       end
     else
       # no form submitted -> render template
@@ -68,19 +76,23 @@ class AdminController < ApplicationController
       # form submitted
       if wiki.authenticate(system_password)
         begin
-          raise InstikiErrors::ValidationError.new("Password for this Web didn't match") unless
-            (params['password'].empty? or params['password'] == params['password_check'])
+          unless params['password'].blank? || params['password'] == params['password_check']
+            raise InstikiErrors::ValidationError.new("Password for this Web didn't match")
+          end
           wiki.edit_web(
-            @web.address, params['address'], params['name'],
-            params['markup'].intern,
-            params['color'], params['additional_style'],
-            params['safe_mode'] ? true : false,
-            params['password'].empty? ? nil : params['password'],
-            params['published'] ? true : false,
-            params['brackets_only'] ? true : false,
-            params['count_pages'] ? true : false,
-            params['allow_uploads'] ? true : false,
-            params['max_upload_size']
+            @web.address,
+            params['address'         ],
+            params['name'            ],
+            params['markup'          ].to_sym,
+            params['color'           ],
+            params['additional_style'],
+            params['safe_mode'       ]        ? true : false,
+            params['password'        ].blank? ?  nil : params['password'],
+            params['published'       ]        ? true : false,
+            params['brackets_only'   ]        ? true : false,
+            params['count_pages'     ]        ? true : false,
+            params['allow_uploads'   ]        ? true : false,
+            params['max_upload_size' ]
           )
           flash[:info] = "Web '#{params['address']}' was successfully updated"
           redirect_home(params['address'])

@@ -142,18 +142,14 @@ p.pageStats, span.unlock {
 font-size: .85em;
 }
 
-.diffdel,del.diffmod, .diffdel *, del.diffmod * {
+#revision del, #revision del * {
 background-color:#FAA;
 text-decoration:line-through;
 }
 
-.diffins,ins.diffmod, .diffins *, ins.diffmod * {
+#revision ins, #revision ins * {
 background-color:#AFA;
-text-decoration:underline;
-}
-
-.diffmod, .diffmod * {
-border: 2px solid #FE0;
+text-decoration: underline;
 }
 
 div.web_normal {

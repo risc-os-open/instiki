@@ -61,37 +61,10 @@ class PageRenderer
         diff_doc.write(diffs, -1, true, true)
         diffs.gsub(/\A<div class='xhtmldiff_wrapper'>(.*)<\/div>\Z/m, '\1').gsub(/(<div[^>]+?)\s*?\/>/, "\\1></div>").html_safe
 
-      rescue
+      rescue => e
+        logger.error(e)
+        h(e.message) + "<p><ins class=\"diffins\"><strong>The current and/or previous revision contain invalid markup which is too broken for the diff parser to understand.</strong></ins></p>".html_safe
 
-        # To reach here, REXML probably complained. Users probably wrote HTML
-        # in the page, but the markup was invalid XHTML - forgetting to close
-        # "<li>" tags is a common example. So, try the diff again, this time
-        # using Hpricot as a wrapper around the post-processed content to try
-        # and sanitise the markup at the possible expense of correctness.
-
-        begin
-
-          previous_content = "<div>" + Hpricot(WikiContent.new(previous_revision, @@url_generator).render!.to_s).to_s + "</div>"
-          current_content = "<div>" + Hpricot(display_content.to_s).to_s + "</div>"
-
-          parsed_previous_revision = REXML::HashableElementDelegator.new(
-               REXML::XPath.first(REXML::Document.new(previous_content), '/div'))
-          parsed_display_content = REXML::HashableElementDelegator.new(
-               REXML::XPath.first(REXML::Document.new(current_content), '/div'))
-
-          hd = XHTMLDiff.new(div)
-          Diff::LCS.traverse_balanced(parsed_previous_revision, parsed_display_content, hd)
-
-          diffs = "<p><ins class=\"diffins\"><strong>Warning: The current and/or previous revision contained markup errors which prevented proper diff analysis. A guess at markup correction has been made but the diff may not be a truly accurate reflection of the real changes.</strong></ins></p>"
-          diff_doc.write(diffs, -1, true, true)
-          diffs.gsub(/\A<div class='xhtmldiff_wrapper'>(.*)<\/div>\Z/m, '\1').gsub(/(<div[^>]+?)\s*?\/>/, "\\1></div>").html_safe
-
-        rescue
-
-          # Further exceptions indicate a lost cause!
-          "<p><ins class=\"diffins\"><strong>The current and/or previous revision contain invalid markup which is too broken for the diff parser to understand.</strong></ins></p>".html_safe
-
-        end
       end
     else
       display_content

@@ -9,7 +9,7 @@ gem 'rails', '~> 7.1.3', '>= 7.1.3.3'
 gem 'sprockets-rails', :require => 'sprockets/railtie'
 
 # Use sqlite3 as the database for Active Record
-gem 'sqlite3', '~> 1.4'
+gem 'sqlite3', '~> 1.7'
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem 'puma', '>= 5.0'
@@ -31,7 +31,7 @@ gem 'bootsnap', require: false
 
 # Easy pagination [https://rubygems.org/gems/pagy]
 #
-gem 'pagy', '~> 8.4'
+gem 'pagy', '~> 9.0'
 
 # Textile support [https://rubygems.org/gems/RedCloth]
 #
@@ -47,7 +47,9 @@ gem 'github-markup', '~> 5.0'
 
 # HTML processing [https://rubygems.org/gems/html-pipeline]
 #
-gem 'html-pipeline', '~> 3.2'
+# TODO: v3.2.1 breaks everything; see
+#
+gem 'html-pipeline', '= 3.2.0'
 
 # Replace Rails <= 3.0 'auto_link' [https://rubygems.org/gems/rails_autolink]
 #
@@ -56,6 +58,14 @@ gem 'rails_autolink', '~> 1.1'
 # List positioning [https://rubygems.org/gems/acts_as_list]
 #
 gem 'acts_as_list', '~> 1.2'
+
+# XML / HTML processing for things like diffs...
+#
+gem 'rexml', '~> 3.3'
+
+# ...and the underlying diff processor.
+#
+gem 'diff-lcs', '~> 1.5'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

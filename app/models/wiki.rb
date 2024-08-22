@@ -1,6 +1,6 @@
 class Wiki
-
   cattr_accessor :storage_path, :logger
+
   self.storage_path = Rails.root.join('storage')
 
   def authenticate(password)
@@ -9,7 +9,7 @@ class Wiki
 
   def create_web(name, address, password = nil)
     @webs = nil
-    Web.create(:name => name, :address => address, :password => password)
+    Web.create!(name: name, address: address, password: password)
   end
 
   def delete_web(address)
@@ -20,21 +20,49 @@ class Wiki
     end
   end
 
-  def edit_web(old_address, new_address, name, markup, color, additional_style, safe_mode = false,
-      password = nil, published = false, brackets_only = false, count_pages = false,
-      allow_uploads = true, max_upload_size = nil)
+  def edit_web(
+    old_address,
+    new_address,
+    name,
+    markup,
+    color,
+    additional_style,
+    safe_mode       = false,
+    password        = nil,
+    published       = false,
+    brackets_only   = false,
+    count_pages     = false,
+    allow_uploads   = true,
+    max_upload_size = nil
+  )
+    web = Web.find_by_address(old_address)
 
-    if not (web = Web.find_by_address(old_address))
+    if web.blank?
       raise InstikiErrors::ValidationError.new("Web with address '#{old_address}' does not exist")
     end
+
     old_files_path = web.files_path
 
-    web.update(:address => new_address, :name => name, :markup => markup, :color => color,
-      :additional_style => additional_style, :safe_mode => safe_mode, :password => password, :published => published,
-      :brackets_only => brackets_only, :count_pages => count_pages, :allow_uploads => allow_uploads, :max_upload_size => max_upload_size)
+    web.update(
+      address:          new_address,
+      name:             name,
+      markup:           markup,
+      color:            color,
+      additional_style: additional_style,
+      safe_mode:        safe_mode,
+      password:         password,
+      published:        published,
+      brackets_only:    brackets_only,
+      count_pages:      count_pages,
+      allow_uploads:    allow_uploads,
+      max_upload_size:  max_upload_size
+    )
+
+    unless web.errors.on(:address).nil?
+      raise InstikiErrors::ValidationError.new("There is already a web with address '#{new_address}'")
+    end
+
     @webs = nil
-    raise InstikiErrors::ValidationError.new("There is already a web with address '#{new_address}'") unless web.errors.on(:address).nil?
-    web
     move_files(old_files_path, web.files_path)
   end
 
@@ -51,14 +79,14 @@ class Wiki
    end
 
   def read_page(web_address, page_name)
-    ApplicationController.logger.debug "Reading page '#{page_name}' from web '#{web_address}'"
+    Rails.logger.debug "Reading page '#{page_name}' from web '#{web_address}'"
     web = Web.find_by_address(web_address)
     if web.nil?
-      ApplicationController.logger.debug "Web '#{web_address}' not found"
+      Rails.logger.debug "Web '#{web_address}' not found"
       return nil
     else
-      page = web.pages.where(name: page_name).first
-      ApplicationController.logger.debug "Page '#{page_name}' #{page.nil? ? 'not' : ''} found"
+      page = web.pages.find_by_name(page_name)
+      Rails.logger.debug "Page '#{page_name}' #{page.nil? ? 'not' : ''} found"
       return page
     end
   end
@@ -85,7 +113,7 @@ class Wiki
   end
 
   def setup(password, web_name, web_address)
-    system.update_attribute(:password, password)
+    system.update_attribute!(:password, password)
     create_web(web_name, web_address)
   end
 

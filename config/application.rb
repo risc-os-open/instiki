@@ -27,6 +27,13 @@ module Beast
     #
     config.autoload_lib(ignore: %w(assets tasks))
 
+    Rails.autoloaders.each do |autoloader|
+      autoloader.inflector.inflect(
+        'dnsbl_check' => 'DNSBL_Check',
+        'xhtml_diff'  => 'XHTMLDiff',
+      )
+    end
+
     # Permitted hosts.
     #
     config.hosts << "epsilon.arachsys.com"

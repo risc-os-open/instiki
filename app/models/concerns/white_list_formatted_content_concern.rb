@@ -182,7 +182,7 @@ module WhiteListFormattedContentConcern
           )
 
           result = pipeline.call(content)
-          result[:output].html_safe()
+          (result[:output] || '').html_safe()
         end
       end
 
