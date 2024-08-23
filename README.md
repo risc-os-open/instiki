@@ -1,26 +1,7 @@
-# README
+# ROOL rebuld of Instiki for Rails 7+
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Gem installation can be a bit fiddly. For Epsilon you'll need something like:
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation and initialization
-
-```shell
-bundle exec rake db:create db:migrate db:seed
+```sh
+LIBCLANG_PATH=/lib/shared/libclang.so bundle install
 ```
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...

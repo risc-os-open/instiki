@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     post(generic_path, **generic_routing_options)
   end
 
+  get  'create_system', controller: 'admin', action: 'create_system'
   post 'create_system', controller: 'admin', action: 'create_system'
   post 'create_web',    controller: 'admin', action: 'create_web'
   post 'delete_web',    controller: 'admin', action: 'delete_web'
