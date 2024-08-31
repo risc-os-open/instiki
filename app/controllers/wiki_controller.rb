@@ -155,13 +155,14 @@ EOL
 
   def list
     parse_category
+
     @page_names_that_are_wanted = @pages_in_category.wanted_pages
     @pages_that_are_orphaned = @pages_in_category.orphaned_pages
   end
 
   def recently_revised
     parse_category
-    @pages_by_revision = @pages_in_category.by_revision.limit(100).to_a
+    @pages_by_revision = @pages_in_category.by_revision
     @pages_by_day = Hash.new { |h, day| h[day] = [] }
     @pages_by_revision.each do |page|
       day = Date.new(page.revised_at.year, page.revised_at.month, page.revised_at.day)
@@ -182,11 +183,27 @@ EOL
     render_atom(hide_description = true)
   end
 
+  # This is spectacularly inefficient, loading all pages into Ruby and doing
+  # the search there. It should be rewritten, but would need to do so in terms
+  # of each page's *most recent revision*, in addition to the page content.
+  #
+  # NB: safe_value = ActiveRecord::Base.sanitize_sql_like(@query || '')
+  #
   def search
-    @query = params['query'].purify
-    @title_results = @web.select { |page| page.name =~ /#{@query}/i }.sort
-    @results = @web.select { |page| page.content =~ /#{@query}/i }.sort
+    @query = params['query']
+
+    # NOTE EARLY EXIT
+    #
+    if @query.blank?
+      flash[:error] = 'Cannot search for blank or empty text'
+      redirect_home()
+      return
+    end
+
+    @title_results  = @web.select { |page| page.name    =~ /#{@query}/i }.sort
+    @results        = @web.select { |page| page.content =~ /#{@query}/i }.sort
     all_pages_found = (@results + @title_results).uniq
+
     if all_pages_found.size == 1
       redirect_to_page(all_pages_found.first.name)
     end
@@ -233,7 +250,7 @@ EOL
     end
 
     @page_name ||= 'HomePage'
-    @page ||= wiki.read_page(@web_name, @page_name)
+    @page      ||= wiki.read_page(@web_name, @page_name)
     @link_mode ||= :publish
     if @page
        @renderer = PageRenderer.new(@page.revisions.last)
@@ -267,12 +284,12 @@ EOL
     render(:status => 404, :text => 'Undefined page name', :layout => 'error') and return if @page_name.nil?
     return unless is_post
     # 2011-01-14 (ADH): Hub integration
-    # author_name = params['author'].purify
+    # author_name = params['author']
     # author_name = 'AnonymousCoward' if author_name =~ /^\s*$/
     author_name = hubssolib_unique_name
 
     begin
-      the_content = params['content'].purify
+      the_content = params['content']
       prev_content = ''
       filter_spam(the_content)
       # 2011-01-14 (ADH): Don't use "as_bytes" in this context. See changes to
@@ -280,7 +297,7 @@ EOL
       # cookies['author'] = { :value => author_name.dup, :expires => Time.utc(2030) }
       cookies['author'] = { :value => author_name.dup.as_bytes, :expires => Time.utc(2030) }
       if @page
-        new_name = params['new_name'] ? params['new_name'].purify : @page_name
+        new_name = params['new_name'] ? params['new_name'] : @page_name
         new_name = @page_name if new_name.empty?
         prev_content = @page.current_revision.content
         raise InstikiErrors::ValidationError.new('A page named "' + new_name.escapeHTML + '" already exists.') if
@@ -376,8 +393,8 @@ EOL
     end
 
     def load_page
-      @page_name = params['id'] ? params['id'].purify : nil
-      @page = @wiki.read_page(@web_name, @page_name) if @page_name
+      @page_name = params['id'].present? ? params['id'] : nil
+      @page      = @wiki.read_page(@web_name, @page_name) if @page_name
     end
 
   private

@@ -18,7 +18,7 @@ def initialize(match_data, content)
     super(match_data, content)
     @content = content
     @hidden = match_data[1]
-    @list = match_data[2].split(',').map { |c| clean = c.purify.strip.escapeHTML; clean if clean != ''}
+    @list = match_data[2].split(',').map { |c| clean = c.strip.escapeHTML; clean if clean != ''}
     @list.compact!
     @unmask_text = ''
     if @hidden

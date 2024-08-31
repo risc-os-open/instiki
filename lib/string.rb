@@ -76,32 +76,6 @@ class String
 	#   end
 	# end
 
-	def purify
-  	# OK, this really doesn't do anything... It tolerates bad sequences. But
-  	# isn't that a good thing? We just pass bytes through.
-  	self.mb_chars.to_s
-	end
-
-	# #++
-	# # Take a string, and remove any invalid substrings, returning a valid utf-8 string.
-	# #
-	# # :call-seq:
-	# #    string.purify    -> new_string
-	# #
-	# # returns a valid utf-8 string, purged of any subsequences of illegal bytes.
-	# #--
-	# if "".respond_to?(:force_encoding)
-	#   def purify
-	#     text = self.dup.check_ncrs.as_utf8
-	#     text.chars.collect{|c| c.as_bytes}.grep(UTF8_REGEX).join.as_utf8
-	#   end
-	# else
-	#   def purify
-	#     text = check_ncrs
-	#     text.split(//u).grep(UTF8_REGEX).join
-	#   end
-	# end
-	#
 	#   def check_ncrs
 	#     text = gsub(/&#[xX]([a-fA-F0-9]+);/) { |m| [$1.hex].pack('U*').as_bytes =~ UTF8_REGEX ? m : '' }
 	#     text.gsub(/&#(\d+);/) { |m| [$1.to_i].pack('U*').as_bytes =~ UTF8_REGEX ? m : '' }

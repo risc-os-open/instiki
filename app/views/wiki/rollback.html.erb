@@ -13,14 +13,14 @@
 	      { :id => 'editForm', :method => 'post', :onsubmit => 'cleanAuthorName();',
 	        'accept-charset' => 'utf-8' }) do %>
 	<div>
-        <textarea name="content" id="content" rows="24" cols="60"><%= h(@revision.content.purify) %></textarea>
+        <textarea name="content" id="content" rows="24" cols="60"><%= h(@revision.content) %></textarea>
 		<div id="editFormButtons">
 	        <input type="submit" value="Update" accesskey="u" />
 <%
    if false # 2011-03-14 (ADH): Hub integration - author comes from logged in user name
 %>
 	      as
-		    <input type="text" name="author" id="authorName" value="<%= h(@author.purify) %>"
+		    <input type="text" name="author" id="authorName" value="<%= h(@author) %>"
 		        onclick="this.value == 'AnonymousCoward' ? this.value = '' : true" />
 <% end %>
 		    |

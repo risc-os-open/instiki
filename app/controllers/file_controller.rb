@@ -120,8 +120,8 @@ class FileController < ApplicationController
       zip = Zip::ZipInputStream.open(archive)
       while (entry = zip.get_next_entry) do
         ext_length = File.extname(entry.name).length
-        page_name = entry.name[0..-(ext_length + 1)].purify
-        page_content = entry.get_input_stream.read.purify
+        page_name = entry.name[0..-(ext_length + 1)]
+        page_content = entry.get_input_stream.read
         logger.info "Processing page '#{page_name}'"
         begin
           existing_page = @wiki.read_page(@web.address, page_name)

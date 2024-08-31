@@ -1,5 +1,9 @@
-            <%= form_tag({ :controller => 'wiki', :action => 'search', :web => @web.address},
-                 {'id' => 'navigationSearchForm', 'method' => 'get', 'accept-charset' => 'utf-8' }) do %>
-              <input type="text" id="searchField" name="query" />
-              <input type="submit" value="Go" />
-            <% end %>
+<%=
+  form_tag(
+    { controller: 'wiki', action: 'search', web: @web.address },
+    { id: 'navigationSearchForm', method: 'get' }
+  ) do
+%>
+  <%= text_field_tag('query', params[:query], { id: 'searchField' }) %>
+  <%= submit_tag('Go') %>
+<% end %>

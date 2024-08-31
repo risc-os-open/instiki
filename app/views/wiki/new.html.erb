@@ -26,7 +26,7 @@
 		) do
 	%>
     <textarea name="content" id="content" rows="24" cols="60"><%= h(flash[:content] ||
-                     params['content'] ?  params['content'].purify : '' ) %></textarea>
+                     params['content'] ?  params['content'] : '' ) %></textarea>
 
 		<div id="editFormButtons">
     	<input type="submit" value="Submit" accesskey="s"/>

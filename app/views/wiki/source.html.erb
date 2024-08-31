@@ -34,7 +34,7 @@
           :title => 'Atom with full content') %>
   <% end %>
 
-  <link type="text/css" rel="stylesheet" href="/css/risc_os_open_2024.css" media="all" />
+  <%= stylesheet_link_tag '/css/risc_os_open_2024' %>
 
   <style type="text/css">
     h1#pageName, div.info, .newWikiWord a, a.existingWikiWord, .newWikiWord a:hover, [actiontype="toggle"]:hover, #TextileHelp h3 {
@@ -83,7 +83,7 @@
 <body>
 
 <div id="Container"><br>
-<textarea id='content' readonly='readonly' rows='24' cols='60' ><%= h(@page.content.purify) %></textarea>
+<textarea id='content' readonly='readonly' rows='24' cols='60' ><%= h(@page.content) %></textarea>
 </div> <!-- Container -->
 
 </body>

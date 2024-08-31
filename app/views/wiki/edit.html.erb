@@ -23,12 +23,12 @@
 	               'accept-charset' => 'utf-8' }) do %>
 	   <div>
 		<textarea name="content" id="content" rows="24" cols="60"><%= h(flash[:content] ||
-                         (params['content'] ?  params['content'] : @page.content).purify) %></textarea>
+                         (params['content'] ?  params['content'] : @page.content)) %></textarea>
 <% if @page_name != 'HomePage' %>
 	   <p>
 	      <%= check_box_tag :alter_title, value = "1", checked=false,
 	         'onchange' => "toggleVisibility();" %> <label for="alter_title">Change page name.</label><br/>
-	      <span id="title_change" style="display:none"><label for="new_name">New name:</label> <%= text_field_tag :new_name, h(@page.name.purify),
+	      <span id="title_change" style="display:none"><label for="new_name">New name:</label> <%= text_field_tag :new_name, h(@page.name),
 			        :onblur => "addRedirect();"  %></span>
 	   </p>
 <% else %>
@@ -40,7 +40,7 @@
    if false # 2011-03-14 (ADH): Hub integration - author comes from logged in user name
 %>
 			as
-			<%= text_field_tag :author, h(@author.purify),
+			<%= text_field_tag :author, h(@author),
 			        :onfocus => "this.value == 'AnonymousCoward' ? this.value = '' : true;",
 			        :onblur  => "this.value == '' ? this.value = 'AnonymousCoward' : true" %>
 <% end %>

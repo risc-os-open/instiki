@@ -75,7 +75,7 @@ module ApplicationHelper
   end
 
   def author_link(page, options = {})
-    UrlGenerator.new(controller).make_link(@web, page.author.name, page.web, nil, options).purify.html_safe
+    UrlGenerator.new(controller).make_link(@web, page.author.name, page.web, nil, options).html_safe
   end
 
   # Create a hyperlink to a particular revision of a Wiki page

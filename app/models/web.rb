@@ -27,23 +27,23 @@ class Web < ApplicationRecord
   end
 
   def settings_changed?(markup, safe_mode, brackets_only)
-    self.markup != markup ||
-    self.safe_mode != safe_mode ||
+    self.markup        != markup ||
+    self.safe_mode     != safe_mode ||
     self.brackets_only != brackets_only
   end
 
   def add_page(name, content, time, author, renderer)
-    page = page(name) || pages.build(:name => name)
+    page = page(name) || pages.build(name: name)
     page.revise(content, name, time, author, renderer)
   end
 
   # @return [Array<String>] a collection of all the names of the authors that
   #   have ever contributed to the pages for this Web
   def authors
-    revisions.all(
-      :select => "DISTINCT revisions.author",
-      :order  => "1"
-    ).collect(&:author)
+    authors = revisions
+      .select('DISTINCT revisions.author')
+      .reorder('1')
+      .pluck(:author)
   end
 
   def categories
@@ -78,11 +78,11 @@ class Web < ApplicationRecord
   end
 
   def has_file?(file_name)
-    wiki_files.exist?(:file_name => file_name)
+    wiki_files.exist?(file_name: file_name)
   end
 
   def file_list(sort_order="file_name")
-    wiki_files.all(:order => sort_order)
+    wiki_files.order(sort_order)
   end
 
   def pages_that_link_to(page_name)
@@ -108,10 +108,9 @@ class Web < ApplicationRecord
   # @return [Hash] a Hash wherein the key is some author's name, and the
   #   values are an array of page names for that author.
   def page_names_by_author
-    data = revisions.all(
-      :select => "DISTINCT revisions.author AS author, pages.name AS page_name",
-      :order  => "pages.name"
-    )
+    data = revisions
+      .select('DISTINCT revisions.author AS author, pages.name AS page_name')
+      .reorder('pages.name ASC')
 
     data.inject({}) do |result, revision|
       result[revision.author] ||= []
@@ -172,11 +171,7 @@ class Web < ApplicationRecord
   # @return [Pathname] the path to the files for this record
   def files_path
     path = Rails.root.join("webs")
-    if default_web?
-      path.join("files")
-    else
-      path.join(address, "files")
-    end
+    path.join(address, "files")
   end
 
   private
@@ -204,8 +199,4 @@ class Web < ApplicationRecord
       end
     end
 
-    # @return [Boolean] whether or not this record is considered the default Web
-    def default_web?
-      defined?(DEFAULT_WEB) && address == DEFAULT_WEB
-    end
 end
