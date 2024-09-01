@@ -65,8 +65,8 @@ class PageSet
   end
 
   def pages_that_reference(page_name)
-    all_referring_pages = WikiReference.pages_that_reference(@web, page_name)
-    @pages.where(id: all_referring_pages.map(&:id))
+    all_referring_page_names = WikiReference.pages_that_reference(@web, page_name)
+    @pages.where(name: all_referring_page_names)
     # self.select { |page| all_referring_pages.include?(page.name) }
   end
 
