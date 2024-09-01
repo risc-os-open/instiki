@@ -1,7 +1,7 @@
 # Container for a set of pages with methods for manipulation.
 
 class PageSet
-  attr_reader :web
+  attr_reader :web, :pages
 
   # Initialise a page set using:
   #
@@ -71,8 +71,8 @@ class PageSet
   end
 
   def pages_that_link_to(page_name)
-    all_linking_pages = WikiReference.pages_that_link_to(@web, page_name)
-    @pages.where(id: all_linking_pages.map(&:id))
+    all_linking_page_names = WikiReference.pages_that_link_to(@web, page_name)
+    @pages.where(name: all_linking_page_names)
     # self.select { |page| all_linking_pages.include?(page.name) }
   end
 

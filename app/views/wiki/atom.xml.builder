@@ -13,7 +13,7 @@ xml.feed('xmlns' => "http://www.w3.org/2005/Atom", "xml:lang" => 'en') do
       xml.link('rel' => 'alternate', 'type' => 'application/xhtml+xml', 'href' => url_for(:only_path => false, :web => @web_name, :action => @link_action, :id => page.name) )
       xml.updated(page.revised_at.getgm.strftime("%Y-%m-%dT%H:%M:%SZ") )
       xml.published(page.created_at.getgm.strftime("%Y-%m-%dT%H:%M:%SZ") )
-      xml.id('tag:' +url_for(:only_path => false, :web => @web_name).split('/')[2].split(':')[0]  + ',' + page.created_at.getgm.strftime("%Y-%m-%d") + ":"  + @web.name + ',' + CGI.escape(page.name)) 
+      xml.id('tag:' +url_for(:only_path => false, :web => @web_name).split('/')[2].split(':')[0]  + ',' + page.created_at.getgm.strftime("%Y-%m-%d") + ":"  + @web.name + ',' + CGI.escape(page.name))
       xml.author do
         xml.name(page.author)
       end

@@ -311,9 +311,11 @@ EOL
             Author.new(author_name, remote_ip), PageRenderer.new)
       end
       redirect_to_page @page_name
+
     rescue InstikiErrors::ValidationError => e
+      logger.error e.message
+      logger.error e.backtrace.join("\n")
       flash[:error] = e.to_s
-      logger.error e
       param_hash = {:web => @web_name, :id => @page_name}
       # Work around Rails bug: flash will not display if query string is longer than 10192 bytes
       param_hash.update( :content => the_content ) if the_content &&
@@ -336,7 +338,8 @@ EOL
       # TODO this rescue should differentiate between errors due to rendering and errors in
       # the application itself (for application errors, it's better not to rescue the error at all)
       rescue => e
-        logger.error e
+        logger.error e.message
+        logger.error e.backtrace.join("\n")
         flash[:error] = e.to_s
         if in_a_web?
           redirect_to :action => 'edit', :web => @web_name, :id => @page_name
@@ -463,10 +466,11 @@ EOL
     end
 
     def render_atom(hide_description = false, limit = 15)
-      @pages_by_revision = @web.select.by_revision.first(limit)
+      @pages_by_revision = @web.select.by_revision.pages.limit(limit).to_a
       @hide_description = hide_description
       @link_action = @web.password ? 'published' : 'show'
-      render :action => 'atom'
+
+      render :atom, type: :builder, format: :xml
     end
 
     def rss_with_content_allowed?

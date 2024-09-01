@@ -67,6 +67,10 @@ gem 'rexml', '~> 3.3'
 #
 gem 'diff-lcs', '~> 1.5'
 
+# RSS (XML) feed building is done via Builder.
+#
+gem 'builder', '~> 3.3'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug'
