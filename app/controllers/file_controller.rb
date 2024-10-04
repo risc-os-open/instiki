@@ -1,13 +1,13 @@
 # Controller responsible for serving files and pictures.
 
-require 'zip/zip'
+#require 'zip/zip'
 
 class FileController < ApplicationController
 
   layout 'default'
 
-  before_actio :check_authorized
-  before_actio :check_allow_uploads, :dnsbl_check, :except => [:file]
+  before_action :check_authorized
+  before_action :check_allow_uploads, :dnsbl_check, :except => [:file]
 
   # 2011-03-14 (ADH): Hub integration.
 
@@ -24,7 +24,11 @@ class FileController < ApplicationController
     if params['file']
       return unless is_post and check_allow_uploads
       # form supplied
-      new_file = @web.wiki_files.create(params['file'])
+      new_file = @web.wiki_files.create(
+        file_name:   params.dig('file', 'file_name'  ),
+        description: params.dig('file', 'description'),
+        content:     params.dig('file', 'content'    )
+      )
       if new_file.valid?
         flash[:info] = "File '#{@file_name}' successfully uploaded"
         redirect_to(params['referring_page'])
@@ -41,7 +45,7 @@ class FileController < ApplicationController
       else
         return unless check_allow_uploads
         @file = WikiFile.new(:file_name => @file_name)
-        render
+        render(formats: [:html])
       end
     end
   end

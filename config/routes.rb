@@ -11,13 +11,13 @@ Rails.application.routes.draw do
     post(generic_path, **generic_routing_options)
   end
 
-  get  'create_system', controller: 'admin', action: 'create_system'
-  post 'create_system', controller: 'admin', action: 'create_system'
-  get  'create_web',    controller: 'admin', action: 'create_web'
-  post 'create_web',    controller: 'admin', action: 'create_web'
-  post 'delete_web',    controller: 'admin', action: 'delete_web'
-  post 'delete_files',  controller: 'admin', action: 'delete_files'
-  get  'web_list',      controller: 'wiki',  action: 'web_list'
+  get  'create_system', to: 'admin#create_system'
+  post 'create_system', to: 'admin#create_system'
+  get  'create_web',    to: 'admin#create_web'
+  post 'create_web',    to: 'admin#create_web'
+  post 'delete_web',    to: 'admin#delete_web'
+  post 'delete_files',  to: 'admin#delete_files'
+  get  'web_list',      to: 'wiki#web_list'
 
   scope '/:web', constraints: { web: WEB_REGEXP } do
     get '', controller: 'wiki', action: 'index'
@@ -26,18 +26,18 @@ Rails.application.routes.draw do
     post        'remove_orphaned_pages',             controller: 'admin'
     post        'remove_orphaned_pages_in_category', controller: 'admin'
 
-    get_or_post 'file/delete/:id', controller: 'file', action: 'delete', requirements: { id: /[-._\w]+/}
-    get_or_post 'files/:id',       controller: 'file', action: 'file',   requirements: { id: /[-._\w]+/}
-    get_or_post 'import/:id',      controller: 'file', action: 'import'
+    get_or_post 'file/delete/:id', to: 'file#delete', constraints: { id: /[-._\w]+/ }
+    get_or_post 'files/:id',       to: 'file#file',   constraints: { id: /[-._\w]+/ }
+    get_or_post 'import/:id',      to: 'file#import'
 
     post        'authenticate', controller: 'wiki'
     post        'save',         controller: 'wiki'
     get_or_post 'edit/:id',     controller: 'wiki', action: 'edit', constraints: { id: ID_REGEXP }
 
-    get 'show/diff/:id',          controller: 'wiki', action: 'show',     constraints: { id: ID_REGEXP                  }, mode: 'diff'
-    get 'revision/diff/:id/:rev', controller: 'wiki', action: 'revision', constraints: { id: ID_REGEXP, rev: REV_REGEXP }, mode: 'diff'
-    get 'revision/:id/:rev',      controller: 'wiki', action: 'revision', constraints: { id: ID_REGEXP, rev: REV_REGEXP }
-    get 'rollback/:id(/:rev)',    controller: 'wiki', action: 'rollback', constraints: { id: ID_REGEXP, rev: REV_REGEXP }
+    get 'show/diff/:id',          to: 'wiki#show',     constraints: { id: ID_REGEXP                  }, mode: 'diff'
+    get 'revision/diff/:id/:rev', to: 'wiki#revision', constraints: { id: ID_REGEXP, rev: REV_REGEXP }, mode: 'diff'
+    get 'revision/:id/:rev',      to: 'wiki#revision', constraints: { id: ID_REGEXP, rev: REV_REGEXP }
+    get 'rollback/:id(/:rev)',    to: 'wiki#rollback', constraints: { id: ID_REGEXP, rev: REV_REGEXP }
 
     get 'atom_with_content',   controller: 'wiki'
     get 'atom_with_headlines', controller: 'wiki'
@@ -65,11 +65,11 @@ Rails.application.routes.draw do
 
     # Legacy I2 route
     #
-    get 'pages/:id', controller: 'i2', action: 'pages', requirements: { id: ID_REGEXP }
+    get 'pages/:id', controller: 'i2', action: 'pages', constraints: { id: ID_REGEXP }
 
   end
 
-  # get_or_post ':web/:action/:id',                controller: 'wiki', requirements: { id: ID_REGEXP }
+  # get_or_post ':web/:action/:id',                controller: 'wiki', constraints: { id: ID_REGEXP }
   # get_or_post ':web/:action',                    controller: 'wiki'
   # get_or_post ':web',                            controller: 'wiki', action: 'index'
 

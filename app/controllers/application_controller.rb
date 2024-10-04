@@ -261,7 +261,7 @@ class ApplicationController < ActionController::Base
       end
 
       session[:last_exception_at] = Time.now.iso8601(1)
-      render 'exception', locals: { exception: exception }
+      render 'exception', formats: [:html], locals: { exception: exception }
     end
 
 end
