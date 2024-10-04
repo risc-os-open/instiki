@@ -78,7 +78,7 @@ class Web < ApplicationRecord
   end
 
   def has_file?(file_name)
-    wiki_files.exist?(file_name: file_name)
+    wiki_files.find_by_file_name(file_name).present?
   end
 
   def file_list(sort_order="file_name")
@@ -97,7 +97,7 @@ class Web < ApplicationRecord
   # @return [String, nil] the description of some WikiFile of interest, nil if
   #   the WikiFile could not be found
   def description(file_name)
-    wiki_files.find_by_file_name(file_name).try(:description)
+    wiki_files.find_by_file_name(file_name)&.description
   end
 
   # @return [Symbol] the type of markup used by this Web

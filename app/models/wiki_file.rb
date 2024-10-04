@@ -1,18 +1,17 @@
+require 'fileutils'
+
 class WikiFile < ApplicationRecord
   belongs_to :web
 
-  before_save :write_content_to_file
+  before_save    :write_content_to_file
   before_destroy :delete_content_file
 
   validates_presence_of %w( web file_name )
-  validates_length_of :file_name, :within=>1..50
-  validates_length_of :description, :maximum=>255
-
-  def self.find_by_file_name(file_name)
-    first(:conditions => ['file_name = ?', file_name])
-  end
+  validates_length_of :file_name,   within:  1..50
+  validates_length_of :description, maximum: 255
 
   SANE_FILE_NAME = /^[a-zA-Z0-9\-_\. ]*$/
+
   def validate
     if file_name
       if file_name !~ SANE_FILE_NAME
@@ -55,10 +54,6 @@ class WikiFile < ApplicationRecord
   end
 
   def delete_content_file
-    require 'fileutils'
     FileUtils.rm_f(content_path) if File.exist?(content_path)
   end
-
-
-
 end
