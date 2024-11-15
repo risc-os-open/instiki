@@ -71,6 +71,7 @@ module WhiteListFormattedContentConcern
         "q"          => ["cite"],
         "source"     => ["srcset"],
         "span"       => ["class"],
+        "table"      => ["class"],
         all: [
           "abbr",
           "accept-charset",

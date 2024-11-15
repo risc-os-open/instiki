@@ -1,42 +1,40 @@
 <%
   @title = "Rollback to #{@page.plain_name} Rev ##{@revision_number}".html_safe
-  @content_width = 720
   @hide_navigation = true
 %>
 
-<div id="MarkupHelp">
-<%= render(:file => "#{@web.markup}_help") %>
-<%= render(:file => 'wiki_words_help') unless @web.brackets_only? %>
-</div>
+<%= render partial: 'shared/syntax_help' %>
 
-	<%= form_tag({:web => @web.address, :action => 'save', :id => @page.name},
-	      { :id => 'editForm', :method => 'post', :onsubmit => 'cleanAuthorName();',
-	        'accept-charset' => 'utf-8' }) do %>
-	<div>
-        <textarea name="content" id="content" rows="24" cols="60"><%= h(@revision.content) %></textarea>
-		<div id="editFormButtons">
-	        <input type="submit" value="Update" accesskey="u" />
-<%
-   if false # 2011-03-14 (ADH): Hub integration - author comes from logged in user name
+<%=
+	form_tag(
+		{
+			action: 'save',
+			web:    @web.address,
+			id:     @page.name
+		},
+		{
+			id:     'editForm',
+			method: 'post',
+			'accept-charset' => 'utf-8'
+		}
+	) do
 %>
-	      as
-		    <input type="text" name="author" id="authorName" value="<%= h(@author) %>"
-		        onclick="this.value == 'AnonymousCoward' ? this.value = '' : true" />
-<% end %>
-		    |
+	<div>
+    <textarea name="content" id="content" rows="24" cols="60"><%= @revision.content %></textarea>
+		<div id="editFormButtons">
+      <input type="submit" value="Update" accesskey="u" />
+	    |
 			<span>
-				<%= link_to('Cancel', {:web => @web.address, :action => 'cancel_edit', :id => @page.name},
-				      {:accesskey => 'c'}) %>
-                <span class="unlock">(unlocks page)</span>
-			</span>
-	    </div>
-	</div>
-	<% end %>
+				<%=
+					link_to(
+						'Cancel',
+						{ web: @web.address, action: 'cancel_edit', id: @page.name},
+				    { accesskey: 'c' }
+					)
+				%>
 
-<script type="text/javascript">
-function cleanAuthorName() {
-  if (document.getElementById('authorName').value == "") {
-    document.getElementById('authorName').value = 'AnonymousCoward';
-  }
-}
-</script>
+        <span class="unlock">(unlocks page)</span>
+			</span>
+    </div>
+	</div>
+<% end %>

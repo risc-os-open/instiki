@@ -71,6 +71,7 @@ class AdminController < ApplicationController
 
   def edit_web
     system_password = params['system_password']
+
     if system_password
       return unless is_post
       # form submitted
@@ -161,7 +162,8 @@ class AdminController < ApplicationController
     else
       flash[:error] = password_error(params['system_password'])
     end
-    redirect_to :back
+
+    redirect_back(fallback_location: root_path())
   end
 
 end

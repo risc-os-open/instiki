@@ -30,14 +30,21 @@ Rails.application.routes.draw do
     get_or_post 'files/:id',       to: 'file#file',   constraints: { id: /[-._\w]+/ }
     get_or_post 'import/:id',      to: 'file#import'
 
-    post        'authenticate', controller: 'wiki'
-    post        'save',         controller: 'wiki'
-    get_or_post 'edit/:id',     controller: 'wiki', action: 'edit', constraints: { id: ID_REGEXP }
+    post 'authenticate', controller: 'wiki'
+    post 'save',         controller: 'wiki'
 
-    get 'show/diff/:id',          to: 'wiki#show',     constraints: { id: ID_REGEXP                  }, mode: 'diff'
-    get 'revision/diff/:id/:rev', to: 'wiki#revision', constraints: { id: ID_REGEXP, rev: REV_REGEXP }, mode: 'diff'
-    get 'revision/:id/:rev',      to: 'wiki#revision', constraints: { id: ID_REGEXP, rev: REV_REGEXP }
-    get 'rollback/:id(/:rev)',    to: 'wiki#rollback', constraints: { id: ID_REGEXP, rev: REV_REGEXP }
+    # The "defaults" options below are to avoid page names with a "." in them
+    # leading to format errors - e.g. "foo.png" shouldn't cause detection of a
+    # PNG format and an arising low-down exception due to the lack of matching
+    # template for the request.
+
+    get_or_post 'edit/:id', to: 'wiki#edit', constraints: { id: ID_REGEXP }, defaults: {format: 'html'}
+
+    get 'show/diff/:id',          to: 'wiki#show',     constraints: { id: ID_REGEXP                  }, mode: 'diff', defaults: {format: 'html'}
+    get 'revision/diff/:id/:rev', to: 'wiki#revision', constraints: { id: ID_REGEXP, rev: REV_REGEXP }, mode: 'diff', defaults: {format: 'html'}
+    get 'revision/:id/:rev',      to: 'wiki#revision', constraints: { id: ID_REGEXP, rev: REV_REGEXP },               defaults: {format: 'html'}
+    get 'rollback/:id/:rev',      to: 'wiki#rollback', constraints: { id: ID_REGEXP, rev: REV_REGEXP },               defaults: {format: 'html'}
+    get 'rollback/:id',           to: 'wiki#rollback', constraints: { id: ID_REGEXP                  },               defaults: {format: 'html'}
 
     get 'atom_with_content',   controller: 'wiki'
     get 'atom_with_headlines', controller: 'wiki'
@@ -51,13 +58,15 @@ Rails.application.routes.draw do
     get 'search',              controller: 'wiki'
     get 'web_list',            controller: 'wiki'
 
-    get 'cancel_edit/:id',     controller: 'wiki', action: 'cancel_edit', constraints: { id: ID_REGEXP }
-    get 'history/:id',         controller: 'wiki', action: 'history',     constraints: { id: ID_REGEXP }
-    get 'locked/:id',          controller: 'wiki', action: 'locked',      constraints: { id: ID_REGEXP }
-    get 'new/:id',             controller: 'wiki', action: 'new',         constraints: { id: ID_REGEXP }
-    get 'print/:id',           controller: 'wiki', action: 'print',       constraints: { id: ID_REGEXP }
-    get 'show/:id',            controller: 'wiki', action: 'show',        constraints: { id: ID_REGEXP }
-    get 'source/:id',          controller: 'wiki', action: 'source',      constraints: { id: ID_REGEXP }
+    # Same reason for the "defaults" options as described above.
+    #
+    get 'cancel_edit/:id',     controller: 'wiki', action: 'cancel_edit', constraints: { id: ID_REGEXP }, defaults: {format: 'html'}
+    get 'history/:id',         controller: 'wiki', action: 'history',     constraints: { id: ID_REGEXP }, defaults: {format: 'html'}
+    get 'locked/:id',          controller: 'wiki', action: 'locked',      constraints: { id: ID_REGEXP }, defaults: {format: 'html'}
+    get 'new/:id',             controller: 'wiki', action: 'new',         constraints: { id: ID_REGEXP }, defaults: {format: 'html'}
+    get 'print/:id',           controller: 'wiki', action: 'print',       constraints: { id: ID_REGEXP }, defaults: {format: 'html'}
+    get 'show/:id',            controller: 'wiki', action: 'show',        constraints: { id: ID_REGEXP }, defaults: {format: 'html'}
+    get 'source/:id',          controller: 'wiki', action: 'source',      constraints: { id: ID_REGEXP }, defaults: {format: 'html'}
 
     get 'file_list(/:sort_order)',      controller: 'wiki', action: 'file_list'
     get 'list(/:category)',             controller: 'wiki', action: 'list',             constraints: { category: /.*/ }
@@ -65,13 +74,13 @@ Rails.application.routes.draw do
 
     # Legacy I2 route
     #
-    get 'pages/:id', controller: 'i2', action: 'pages', constraints: { id: ID_REGEXP }
+    get 'pages/:id', controller: 'i2', action: 'pages', constraints: { id: ID_REGEXP }, defaults: {format: 'html'}
 
   end
 
-  # get_or_post ':web/:action/:id',                controller: 'wiki', constraints: { id: ID_REGEXP }
-  # get_or_post ':web/:action',                    controller: 'wiki'
-  # get_or_post ':web',                            controller: 'wiki', action: 'index'
+  # get_or_post ':web/:action/:id', controller: 'wiki', constraints: { id: ID_REGEXP }
+  # get_or_post ':web/:action',     controller: 'wiki'
+  # get_or_post ':web',             controller: 'wiki', action: 'index'
 
   root controller: 'wiki', action: 'index'
 end

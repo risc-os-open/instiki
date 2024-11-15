@@ -58,8 +58,21 @@ module DNSBL_Check
       $dnsbl_passed.push request.remote_addr
       logger.warn("#{request.remote_addr} added to DNSBL passed cache")
     else
-      render( :text => "<p>Access denied. Your IP address, #{request.remote_addr}, was found on one or more DNSBL" +
-                       " blocking list(s).</p>#{ban_help}", :status => 403, :layout => 'error', :locals => {:raw => true})
+      message = %{
+        <p>
+          Access denied. Your IP address, #{request.remote_addr}, was found on
+          one or more DNSBL blocking list(s).
+        </p>
+        #{ban_help}
+      }
+
+      render(
+        'error',
+        status:  403,
+        formats: [:html],
+        locals:  { message: message }
+      )
+
       return false
     end
   end

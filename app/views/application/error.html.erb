@@ -1,0 +1,10 @@
+<% if Rails.env.production? %>
+  <h1>That didn't work</h1>
+  <p>
+    Sorry! Something went wrong. Please contact ROOL if this error persists by
+    <a href="mailto:webmaster@riscosopen.org">e-mailing <code>webmaster@riscosopen.org</code></a>.
+  </p>
+<% else %>
+  <h1><%= response.status %></h1>
+  <h2><%= message %></h2>
+<% end %>

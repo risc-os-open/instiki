@@ -58,7 +58,7 @@ class Wiki
       max_upload_size:  max_upload_size
     )
 
-    unless web.errors.on(:address).nil?
+    unless web.errors.include?(:address)
       raise InstikiErrors::ValidationError.new("There is already a web with address '#{new_address}'")
     end
 

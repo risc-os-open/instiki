@@ -9,6 +9,9 @@ class FileController < ApplicationController
   before_action :check_authorized
   before_action :check_allow_uploads, :dnsbl_check, :except => [:file]
 
+  skip_before_action :hubssolib_beforehand, only: [:file]
+  skip_after_action  :hubssolib_afterwards, only: [:file]
+
   # 2011-03-14 (ADH): Hub integration.
 
   HUBSSOLIB_PERMISSIONS = HubSsoLib::Permissions.new({
@@ -101,18 +104,42 @@ class FileController < ApplicationController
         return true
       else
         @hide_navigation  = true
-        render(:status => 403, :text => 'This web is private', :layout => true)
+
+        render(
+          'error',
+          status:  403,
+          formats: [:html],
+          locals:  { message: 'This web is private' }
+        )
+
         return false
       end
     end
 
     def check_allow_uploads
-      render(:status => 404, :text => "Web #{params['web'].inspect} not found", :layout => 'error') and return false unless @web
+      unless @web
+        render(
+          'error',
+          status:  404,
+          formats: [:html],
+          locals:  { message: "Web #{params['web'].inspect} not found" }
+        )
+
+        return false
+      end
+
       if @web.allow_uploads? and authorized?
         return true
       else
         @hide_navigation  = true
-        render(:status => 403, :text => 'File uploads are blocked by the webmaster', :layout => true)
+
+        render(
+          'error',
+          status:  403,
+          formats: [:html],
+          locals:  { message: 'File uploads are blocked by the webmaster' }
+        )
+
         return false
       end
     end

@@ -176,54 +176,63 @@ white-space:nowrap;
 div#editForm textarea#content {
 }
 
+input#hidebutton {
+  margin: 5px 0 15px 0;
+}
+
 div#MarkupHelp {
-float:right;
-margin-top:0.5em;
-width:25%;
+  float: right;
+  width: 25%;
 }
 
 div#MarkupHelp table {
-border-bottom:3px solid #BBB;
-border-left:3px solid #999;
-border-right:3px solid #BBB;
-border-top:3px solid #999;
-margin-bottom:0;
+  border: 1px solid #BBB;
+  border-bottom: none;
 }
 
 div#MarkupHelp td {
-border:1px solid #999;
-border-width:1px 0;
-font-size:80%;
-margin:0;
-padding:0.2em;
-vertical-align:top;
-white-space:nowrap;
+  border-bottom:1px solid #BBB;
+  font-size:80%;
+  margin:0;
+  padding:0.2em;
+  vertical-align:top;
+  white-space:nowrap;
 }
 
 div#MarkupHelp td.arrow {
-color:#666;
-padding:0 0.75em 0 0;
+  color:#666;
+  padding:0 0.75em 0 0;
+}
+
+div#MarkupHelp h2 {
+  font-size: 110%;
+  padding: 0;
+  margin: 30px 0 0 0;
+}
+
+div#MarkupHelp > h2:first-child {
+  margin-top: 0;
 }
 
 div#MarkupHelp h3 {
-font-size:90%;
-font-weight:bold;
-margin:0 0 5px;
-padding:5px 0 0;
+  font-size:90%;
+  font-weight:bold;
+  margin:0 0 5px;
+  padding:5px 0 0;
 }
 
 div#MarkupHelp p {
-font-size:70%;
+  font-size: 80%;
 }
 
 div.rightHandSide {
-border-left:1px dotted #ccc;
-border-bottom:1px dotted #ccc;
-float:right;
-font-size:80%;
-margin-left:0.7em;
-padding-left:1.5em;
-width:25%;
+  border-left:1px dotted #ccc;
+  border-bottom:1px dotted #ccc;
+  float:right;
+  font-size:80%;
+  margin-left:0.7em;
+  padding-left:1.5em;
+  width:25%;
 }
 
 .newsList {

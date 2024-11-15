@@ -1,13 +1,9 @@
 <%
   @title = "Creating #{WikiWords.separate(@page_name).escapeHTML}".html_safe
-  @content_width = 720
   @hide_navigation = true
 %>
 
-<div id="MarkupHelp">
-	<%= render partial: "shared/#{@web.markup}_help" %>
-	<%= render partial: 'shared/wiki_words_help' unless @web.brackets_only? %>
-</div>
+<%= render partial: 'shared/syntax_help' %>
 
 <div id="editForm">
 	<%=
@@ -18,36 +14,22 @@
 				id:     @page_name
 			},
 	    {
-				'id'             => 'editForm',
-				'method'         => 'post',
-				'onsubmit'       => 'cleanAuthorName();',
+				id:     'editForm',
+				method: 'post',
 				'accept-charset' => 'utf-8'
 			}
 		) do
 	%>
-    <textarea name="content" id="content" rows="24" cols="60"><%= h(flash[:content] ||
-                     params['content'] ?  params['content'] : '' ) %></textarea>
+		<%= textarea_content = flash[:content] || params['content'] || '' %>
+    <textarea name="content" id="content" rows="24" cols="60"><%= textarea_content %></textarea>
 
 		<div id="editFormButtons">
     	<input type="submit" value="Submit" accesskey="s"/>
-
-			<% if false %><%# 2011-03-14 (ADH): Hub integration - author comes from logged in user name %>
-				as
-				<%= text_field_tag :author, @author,
-    				:onfocus => "this.value == 'AnonymousCoward' ? this.value = '' : true;",
-    				:onblur  => "this.value == '' ? this.value = 'AnonymousCoward' : true" %>
-			<% end %>
     </div>
 	<% end %>
 </div>
 
 <script type="text/javascript">
-	function cleanAuthorName() {
-  	if (document.getElementById('authorName').value == "") {
-    	document.getElementById('authorName').value = 'AnonymousCoward';
-  	}
-	}
-
 	document.forms["editForm"].elements["content"].focus();
 
 	<% if @web.markup.to_s == 'markdown' %>

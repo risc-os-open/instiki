@@ -174,8 +174,11 @@ EOL
     if rss_with_content_allowed?
       render_atom(hide_description = false)
     else
-      render :text => 'Atom feed with content for this web is blocked for security reasons. ' +
-        'The web is password-protected and not published', :status => 403, :layout => 'error'
+      render(
+        status: 403,
+        text: 'Atom feed with content for this web is blocked for security reasons. ' +
+              'The web is password-protected and not published'
+      )
     end
   end
 
@@ -245,7 +248,13 @@ EOL
 
   def published
     if not @web.published?
-      render(:text => "Published version of web '#{@web_name}' is not available", :status => 404, :layout => 'error')
+      render(
+        'error',
+        status:  404,
+        formats: [:html],
+        locals:  { message: "Published version of web '#{@web_name}' is not available" }
+      )
+
       return
     end
 
@@ -260,7 +269,12 @@ EOL
           flash[:info] = "Redirected from \"#{@page_name}\"."
           redirect_to :web => @web_name, :action => 'published', :id => real_page, :status => 301
         else
-          render(:text => "Page '#{@page_name}' not found", :status => 404, :layout => 'error')
+          render(
+            'error',
+            status:  404,
+            formats: [:html],
+            locals:  { message: "Page '#{@page_name}' not found" }
+          )
         end
      end
   end
@@ -281,8 +295,18 @@ EOL
   end
 
   def save
-    render(:status => 404, :text => 'Undefined page name', :layout => 'error') and return if @page_name.nil?
-    return unless is_post
+    if ! is_post
+      return
+    elsif @page_name.nil?
+      render(
+        'error',
+        status:  404,
+        formats: [:html],
+        locals:  { message: 'Undefined page name' }
+      )
+      return
+    end
+
     # 2011-01-14 (ADH): Hub integration
     # author_name = params['author']
     # author_name = 'AnonymousCoward' if author_name =~ /^\s*$/
@@ -359,7 +383,12 @@ EOL
           redirect_to :web => @web_name, :action => 'new', :id => @page_name
         end
       else
-        render :text => 'Page name is not specified', :status => 404, :layout => 'error'
+        render(
+          'error',
+          status:  404,
+          formats: [:html],
+          locals:  { message: 'Page name is not specified' }
+        )
       end
     end
   end
@@ -380,7 +409,12 @@ EOL
       if not @page_name.nil? and not @page_name.empty?
         redirect_to :web => @web_name, :action => 'new', :id => @page_name
       else
-        render :text => 'Page name is not specified', :status => 404, :layout => 'error'
+        render(
+          'error',
+          status:  404,
+          formats: [:html],
+          locals:  { message: 'Page name is not specified' }
+        )
       end
     end
   end

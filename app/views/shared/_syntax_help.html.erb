@@ -1,0 +1,9 @@
+<div id="MarkupHelp">
+  <% unless @web.brackets_only? %>
+    <h2>Links, images and files</h2>
+	  <%= render partial: 'shared/wiki_words_help' %>
+  <% end %>
+
+  <h2>Everything else</h2>
+	<%= render partial: "shared/#{@web.markup}_help" %>
+</div>
