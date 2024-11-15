@@ -133,6 +133,10 @@ font-size: 1.2em;
 font-size: .8em;
 }
 
+#categories {
+  margin: 20px 0;
+}
+
 .pageType {
 font-size: .75em;
 font-style: italic;

@@ -131,8 +131,8 @@ module ApplicationHelper
       ''
     else
       ("<div id=\"categories\">\n" +
-      '<strong>Categories</strong>:' +
-      '[' + link_to_unless_current('Any', :web => @web.address, :action => self.action_name, :category => nil) + "]\n" +
+      '<strong>Categories:</strong> ' +
+      '[' + link_to_unless_current('All', :web => @web.address, :action => self.action_name, :category => nil) + "]\n" +
       @categories.map { |c|
         link_to_unless_current(c.html_safe, :web => @web.address, :action => self.action_name, :category => c)
       }.join(', ') + "\n" +
