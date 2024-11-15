@@ -137,12 +137,7 @@ class PageSet
   end
 
   def pages_in_category(category)
-    page_ids = WikiReference.pages_in_category(web, category)
-    return @pages.where(id: page_ids)
-
-    # self.select { |page|
-    #   WikiReference.pages_in_category(web, category).map.include?(page.name)
-    # }
+    WikiReference.pages_in_category(web, category)
   end
 
   # Returns all the wiki words in this page set for which

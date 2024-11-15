@@ -88,7 +88,6 @@ class WikiReference < ApplicationRecord
         .where(wiki_references: { link_type: CATEGORY, referenced_name: category })
         .where(pages:           { web_id: web.id })
         .order(name: :asc)
-        .pluck(:name)
     )
   end
 

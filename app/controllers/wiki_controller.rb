@@ -484,7 +484,7 @@ EOL
       @category = params['category']
       if @category
         @set_name = "category '#{@category}'"
-        pages = WikiReference.pages_in_category(@web, @category).map { |page_name| @web.page(page_name) }
+        pages = WikiReference.pages_in_category(@web, @category)
         @pages_in_category = PageSet.new(@web, pages)
       else
         # no category specified, return all pages of the web
