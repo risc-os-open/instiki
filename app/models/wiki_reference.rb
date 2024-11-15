@@ -77,27 +77,31 @@ class WikiReference < ApplicationRecord
       'WHERE wiki_references.referenced_name = ? ' +
       "AND wiki_references.link_type = '#{REDIRECTED_PAGE}' " +
       "AND pages.web_id = '#{web.id}'"
-    row = connection.select_one(sanitize_sql([query, page_name]))
-    row['name'].as_utf8 if row
+
+    return connection.select_one(sanitize_sql([query, page_name]))
   end
 
   def self.pages_in_category(web, category)
-    query =
-      "SELECT name FROM pages JOIN wiki_references " +
-      "ON pages.id = wiki_references.page_id " +
-      "WHERE wiki_references.referenced_name = ? " +
-      "AND wiki_references.link_type = '#{CATEGORY}' " +
-      "AND pages.web_id = '#{web.id}'"
-    names = connection.select_all(sanitize_sql([query, category])).map { |row| row['name'].as_utf8 }
+    return (
+      Page
+        .joins(:wiki_references)
+        .where(wiki_references: { link_type: CATEGORY, referenced_name: category })
+        .where(pages:           { web_id: web.id })
+        .order(name: :asc)
+        .pluck(:name)
+    )
   end
 
   def self.list_categories(web)
-    query = "SELECT DISTINCT wiki_references.referenced_name " +
-      "FROM wiki_references LEFT OUTER JOIN pages " +
-      "ON wiki_references.page_id = pages.id " +
-      "WHERE wiki_references.link_type = '#{CATEGORY}' " +
-      "AND pages.web_id = '#{web.id}'"
-    connection.select_all(query).map { |row| row['referenced_name'].as_utf8 }
+    return (
+      WikiReference
+        .select(:referenced_name).distinct
+        .left_outer_joins(:page)
+        .where(wiki_references: { link_type: CATEGORY })
+        .where(pages:           { web_id: web.id })
+        .order(referenced_name: :asc)
+        .pluck(:referenced_name)
+    )
   end
 
   def wiki_word?
