@@ -38,8 +38,6 @@ module Beast
     #
     config.hosts << "epsilon.arachsys.com"
 
-    config.session_store :cookie_store, key: 'instikiapp_session_id'
-
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading
