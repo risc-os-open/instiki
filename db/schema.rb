@@ -11,21 +11,24 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.1].define(version: 2010_01_01_192755) do
-  create_table "pages", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "pages", id: :serial, force: :cascade do |t|
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "web_id", default: 0, null: false
     t.string "locked_by", limit: 60
     t.string "name", limit: 255
-    t.datetime "locked_at"
+    t.datetime "locked_at", precision: nil
   end
 
-  create_table "revisions", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "revised_at", null: false
+  create_table "revisions", id: :serial, force: :cascade do |t|
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "revised_at", precision: nil, null: false
     t.integer "page_id", default: 0, null: false
-    t.text "content", limit: 16777215
+    t.text "content"
     t.string "author", limit: 60
     t.string "ip", limit: 60
     t.index ["author"], name: "index_revisions_on_author"
@@ -33,20 +36,20 @@ ActiveRecord::Schema[7.1].define(version: 2010_01_01_192755) do
     t.index ["page_id"], name: "index_revisions_on_page_id"
   end
 
-  create_table "sessions", force: :cascade do |t|
-    t.string "session_id"
+  create_table "sessions", id: :serial, force: :cascade do |t|
+    t.string "session_id", limit: 255
     t.text "data"
-    t.datetime "updated_at"
+    t.datetime "updated_at", precision: nil
     t.index ["session_id"], name: "index_sessions_on_session_id"
   end
 
-  create_table "system", force: :cascade do |t|
+  create_table "system", id: :serial, force: :cascade do |t|
     t.string "password", limit: 60
   end
 
-  create_table "webs", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+  create_table "webs", id: :serial, force: :cascade do |t|
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "name", limit: 60, default: "", null: false
     t.string "address", limit: 60, default: "", null: false
     t.string "password", limit: 60
@@ -61,19 +64,19 @@ ActiveRecord::Schema[7.1].define(version: 2010_01_01_192755) do
     t.integer "brackets_only", default: 0
   end
 
-  create_table "wiki_files", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+  create_table "wiki_files", id: :serial, force: :cascade do |t|
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "web_id", null: false
-    t.string "file_name", null: false
-    t.string "description", null: false
+    t.text "file_name", null: false
+    t.text "description", null: false
   end
 
-  create_table "wiki_references", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+  create_table "wiki_references", id: :serial, force: :cascade do |t|
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "page_id", default: 0, null: false
-    t.string "referenced_name", limit: 255
+    t.string "referenced_name", limit: 255, default: "", null: false
     t.string "link_type", limit: 1, default: "", null: false
     t.index ["page_id"], name: "index_wiki_references_on_page_id"
     t.index ["referenced_name"], name: "index_wiki_references_on_referenced_name"
