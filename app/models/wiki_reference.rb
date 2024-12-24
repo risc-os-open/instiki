@@ -78,7 +78,8 @@ class WikiReference < ApplicationRecord
       "AND wiki_references.link_type = '#{REDIRECTED_PAGE}' " +
       "AND pages.web_id = '#{web.id}'"
 
-    return connection.select_one(sanitize_sql([query, page_name]))
+    row = connection.select_one(sanitize_sql([query, page_name]))
+    row&.dig('name')
   end
 
   def self.pages_in_category(web, category)

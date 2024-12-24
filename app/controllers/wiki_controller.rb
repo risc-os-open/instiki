@@ -203,9 +203,49 @@ EOL
       return
     end
 
-    @title_results  = @web.select { |page| page.name    =~ /#{@query}/i }.sort
-    @results        = @web.select { |page| page.content =~ /#{@query}/i }.sort
-    all_pages_found = (@results + @title_results).uniq
+    # The old Instiki code enumerated all pages and used Ruby to search the
+    # Revision-based content and Page-based name (title) of each. It was very
+    # slow. We use a database approach instead, though it is a bit complex.
+    #
+    # Here, we'll be assuming ILIKE is available (PostgreSQL or compatible).
+    #
+    safe_for_LIKE_query = ActiveRecord::Base.sanitize_sql_like(@query)
+    safe_wildcard_query = "%#{ safe_for_LIKE_query }%"
+
+    # Revisions hold the page content, but only the newest revision for each
+    # page is relevant. Using "revised_at" is more strictly correct than "id",
+    # but with a very slim chance of matching more than one record even on a
+    # millisecond or higher resolution. Given that this is just for search
+    # results, the very small chance of returning an old revision seems OK for
+    # a minimal query database lookup.
+    #
+    grouped_max_revised_at = Revision.select('MAX(revised_at)').group(:page_id)
+    relevant_revisions     = Revision.where(revised_at: grouped_max_revised_at)
+    revisions_by_content   = relevant_revisions.where(
+      '("revisions"."content" ILIKE ?)',
+      safe_wildcard_query
+    )
+
+    # This will all make the DB work quite hard, but it's a lot faster at this
+    # kind of workload than Ruby, even with all the subqueries we're using.
+    #
+    pages_in_web = Page.where(web_id: @web.id)
+    revisions_by_content_in_web = revisions_by_content.where(page_id: pages_in_web)
+    @results = Page.where(id: revisions_by_content_in_web.select(:page_id))
+
+    # Page title is simple!
+    #
+    @title_results = Page.where(
+      '("pages"."name" ILIKE ?)',
+      safe_wildcard_query
+    )
+
+    # Combine the result set.
+    #
+    all_pages_found = @title_results.or(@results).order('"pages"."name" ASC')
+
+    @results       = @results.includes(:web, :revisions)
+    @title_results = @title_results.includes(:web, :revisions)
 
     if all_pages_found.size == 1
       redirect_to_page(all_pages_found.first.name)

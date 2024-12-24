@@ -31,7 +31,7 @@ module AuthenticationSystem
         format.html { redirect_to login_path }
         format.js   { render(:update) { |p| p.redirect_to login_path } }
         format.xml  do
-          headers["WWW-Authenticate"] = %(Basic realm="Beast")
+          headers["WWW-Authenticate"] = %(Basic realm="Instiki")
           render :text => "HTTP Basic: Access denied.\n", :status => :unauthorized
         end
       end unless logged_in? && authorized?

@@ -29,7 +29,7 @@ class UrlGenerator < AbstractUrlGenerator
       end
     end
 
-    def page_link(mode, name, text, web_address, known_page)
+    def page_link(mode, name, text, web_address, known_page, web = nil)
       case mode
       when :export
         if known_page
@@ -39,13 +39,13 @@ class UrlGenerator < AbstractUrlGenerator
         end
       when :publish
         if known_page
-          wikilink_for(mode, name, text, web_address)
+          wikilink_for(mode, name, text, web_address, web)
         else
           %{<span class="newWikiWord">#{text}</span>}
         end
       else
         if known_page
-          wikilink_for(mode, name, text, web_address)
+          wikilink_for(mode, name, text, web_address, web)
         else
           href = @controller.url_for :controller => 'wiki', :web => web_address, :action => 'new',
               :id => name, :only_path => true
@@ -114,8 +114,8 @@ class UrlGenerator < AbstractUrlGenerator
       end
     end
 
-    def wikilink_for(mode, name, text, web_address)
-      web = Web.find_by_address(web_address)
+    def wikilink_for(mode, name, text, web_address, web = nil)
+      web ||= Web.find_by_address(web_address)
       action = web.published? && (web != @web || mode == :publish) ? 'published' : 'show'
       href = @controller.url_for :controller => 'wiki', :web => web_address, :action => action,
             :id => name, :only_path => true

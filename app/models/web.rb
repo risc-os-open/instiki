@@ -66,15 +66,27 @@ class Web < ApplicationRecord
   # @return [Boolean] whether or not a given Page record exists with a given
   #   name
   def has_page?(name)
-    pages.where(name: name).any?
+    @has_page_per_request_cache ||= {}
+
+    unless @has_page_per_request_cache.key?(:name)
+      @has_page_per_request_cache[:name] = pages.where(name: name).any?
+    end
+
+    @has_page_per_request_cache[:name]
   end
 
   def has_redirect_for?(name)
-     WikiReference.page_that_redirects_for(self, name)
+    self.page_that_redirects_for(name).present?
   end
 
   def page_that_redirects_for(name)
-     page(WikiReference.page_that_redirects_for(self, name))
+    @page_redirection_per_request_cache ||= {}
+
+    unless @page_redirection_per_request_cache.key?(name)
+      @page_redirection_per_request_cache[name] = page(WikiReference.page_that_redirects_for(self, name))
+    end
+
+    @page_redirection_per_request_cache[name]
   end
 
   def has_file?(file_name)
@@ -128,12 +140,12 @@ class Web < ApplicationRecord
     select.most_recent_revision
   end
 
-  def select(&condition)
-    PageSet.new(self, pages, condition)
+  def select(conditions = nil)
+    PageSet.new(self, pages, conditions)
   end
 
   def select_all
-    PageSet.new(self, pages, nil)
+    PageSet.new(self, pages)
   end
 
   # @return [String] uses the +address+ attribute for this record's parameter name

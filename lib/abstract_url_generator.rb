@@ -36,7 +36,7 @@ class AbstractUrlGenerator
 
     case link_type
     when :show
-      page_link(mode, name, text, web.address, known_page)
+      page_link(mode, name, text, web.address, known_page, web)
     when :file
       file_link(mode, name, text, web.address, known_page, description)
     when :pic

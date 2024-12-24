@@ -12,11 +12,16 @@ class Page < ApplicationRecord
     -> { order('referenced_name ASC') }
   )
 
-  has_one(
-    :current_revision,
-    -> { order('id DESC') },
-    class_name: 'Revision'
-  )
+  # 2024-12-24 (ADH): Used to be a 'has_one' relationship, "id DESC" ordering.
+  #
+  # This is implemented as a Ruby iterator so that eager-loading of 'revisions'
+  # will work, else we've an enforced DB query on every single current revision
+  # reference codebase-wide. Using a local Ruby search over what is usually a
+  # quite small array (rarely more than tens of items) was much, much faster.
+  #
+  def current_revision
+    self.revisions.to_a.sort_by(&:id).last
+  end
 
   def name
     read_attribute(:name).as_utf8
@@ -91,11 +96,11 @@ class Page < ApplicationRecord
   end
 
   def wiki_words
-    wiki_references.select { |ref| ref.wiki_word? }.map { |ref| ref.referenced_name }
+    wiki_references.to_a.select { |ref| ref.wiki_word? }.map { |ref| ref.referenced_name }
   end
 
   def categories
-    wiki_references.select { |ref| ref.category? }.map { |ref| ref.referenced_name }
+    wiki_references.to_a.select { |ref| ref.category? }.map { |ref| ref.referenced_name }
   end
 
   def linked_from
@@ -103,7 +108,7 @@ class Page < ApplicationRecord
   end
 
   def redirects
-    wiki_references.select { |ref| ref.redirected_page? }.map { |ref| ref.referenced_name }
+    wiki_references.to_a.select { |ref| ref.redirected_page? }.map { |ref| ref.referenced_name }
   end
 
   def included_from

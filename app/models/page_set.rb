@@ -6,28 +6,25 @@ class PageSet
   # Initialise a page set using:
   #
   # * The Web of interest
-  # * An optional Array of Pages within that web, using any selection metric;
-  #   this is internally converted to IDs and transformed into a ".where" query
-  #   so that, internally, ActiveRecord query chains can be applied.
-  # * An optional Proc which is used to filter the *array* in the second
-  #   parameter; i.e., filtering is done on the Ruby side. This narrows down
-  #   the page collection that's then converted to IDs as described above.
+  # * An optional ActiveRecord::Relation starting point that selects pages for
+  #   the page set, but may have additional query parts chained onto it later.
+  # * An optional set of conditions to pass to a single #where that is chained
+  #   onto the second parameter.
   #
   # It's more efficient to use the database to produce a page subset for the
   # second parameter than it is to use the third parameter, since that means
   # processing is done in Ruby, using web server CPU and RAM.
   #
-  def initialize(web, page_subset_array = nil, condition = nil)
+  def initialize(web, page_set_query = nil, conditions = nil)
+    eager  = [:web, :revisions, :wiki_references]
     @web   = web
-    @pages =  if page_subset_array.nil?
+    @pages =  if page_set_query.nil?
       # if pages is not specified, make a list of all pages in the web
-      web.pages
-    elsif condition.nil?
-      page_ids = page_subset_array.map(&:id)
-      web.pages.where(id: page_ids)
+      web.pages.includes(*eager)
+    elsif conditions.nil?
+      page_set_query.includes(*eager)
     else
-      page_ids = page_subset_array.select { |page| condition[page] }.map(&:id)
-      web.pages.where(id: page_ids)
+      page_set_query.includes(*eager).where(conditions)
     end
   end
 
@@ -35,33 +32,29 @@ class PageSet
     @pages.each(&block)
   end
 
+  # Just returns a date-time of the most recent revision across *all* pages in
+  # this page set.
+  #
   def most_recent_revision
     most_recent = Revision.where(page: @pages).order(id: :desc).first
     most_recent&.revised_at || Time.at(0)
-    # self.map { |page| page.revised_at }.max || Time.at(0)
   end
 
   def by_name
-    PageSet.new(
-      @web,
-      @pages.order(name: :asc)
-    )
-
-    # PageSet.new(@web, sort_by { |page| page.name })
+    PageSet.new(@web, @pages.order(name: :asc))
   end
 
   alias :sort :by_name
 
   def by_revision
     ordered_pages = @pages
-      .joins('INNER JOIN "revisions" ON "revisions"."page_id" = "pages"."id"')
-      .select('"pages".*, MAX("revisions"."revised_at") AS max_revised_at')
-      .group('"revisions"."page_id"')
+      .left_joins(:revisions)
+      .includes(:revisions)
+      .select('"pages".*, MAX("revisions"."revised_at") AS "max_revised_at"')
+      .group('"pages"."id"')
       .order('"max_revised_at" DESC')
 
     PageSet.new(@web, ordered_pages)
-
-    # PageSet.new(@web, sort_by { |page| page.revised_at }).reverse
   end
 
   def pages_that_reference(page_name)
