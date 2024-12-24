@@ -544,7 +544,7 @@ EOL
       @hide_description = hide_description
       @link_action = @web.password ? 'published' : 'show'
 
-      render :atom, type: :builder, format: :xml
+      render :atom, type: :builder, formats: :xml
     end
 
     def rss_with_content_allowed?
