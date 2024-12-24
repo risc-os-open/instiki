@@ -50,9 +50,7 @@ gem 'github-markup', '~> 5.0'
 
 # HTML processing [https://rubygems.org/gems/html-pipeline]
 #
-# TODO: v3.2.1 breaks everything; see
-#
-gem 'html-pipeline', '= 3.2.0'
+gem 'html-pipeline', '~> 3.2'
 
 # Replace Rails <= 3.0 'auto_link' [https://rubygems.org/gems/rails_autolink]
 #
@@ -83,11 +81,9 @@ group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem 'web-console'
 
-  # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
-  # gem 'rack-mini-profiler'
-
-  # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
-  # gem 'spring'
+  # Make generated SQL a little easier to read, where needed:
+  # 'puts Niceql::Prettifier.prettify_sql(some_ar_statement.to_sql)'
+  gem 'niceql', '~> 0.6'
 
   gem 'error_highlight', '>= 0.4.0', platforms: [:ruby]
 end
