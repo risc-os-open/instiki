@@ -364,7 +364,7 @@ nav.pagy a {
   border: 1px solid #ddd;
   border-right: none;
   padding: 5px;
-  width: 1em;
+  min-width: 1em;
   text-align: center;
 }
 
