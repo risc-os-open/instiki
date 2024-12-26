@@ -46,15 +46,33 @@ class PageSet
 
   alias :sort :by_name
 
-  def by_revision
-    ordered_pages = @pages
-      .left_joins(:revisions)
-      .includes(:revisions)
-      .select('"pages".*, MAX("revisions"."revised_at") AS "max_revised_at"')
-      .group('"pages"."id"')
-      .order('"max_revised_at" DESC')
+  def by_revision(offset = 0, limit = 50)
 
-    PageSet.new(@web, ordered_pages)
+    # Build something akin to this, but as an ActiveRecord relation chain so we
+    # can later easily apply offsets, limits, count, constrain by web etc.:
+    #
+    #   SELECT pages.*
+    #   FROM pages
+    #   JOIN (
+    #       SELECT page_id, MAX(revised_at) AS max_revised_at
+    #       FROM revisions
+    #       GROUP BY page_id
+    #   ) revisions ON pages.id = revisions.page_id
+    #   ORDER BY revisions.max_revised_at DESC
+    #
+    join_sql = <<~JOINS
+      JOIN (
+        SELECT page_id, MAX(revised_at) AS max_revised_at
+        FROM revisions
+        GROUP BY page_id
+      ) max_revisions_join ON pages.id = max_revisions_join.page_id
+    JOINS
+
+    ordered_pages = @pages
+      .joins(join_sql)
+      .reorder('max_revisions_join.max_revised_at DESC')
+
+    return PageSet.new(@web, ordered_pages.where(web: @web))
   end
 
   def pages_that_reference(page_name)

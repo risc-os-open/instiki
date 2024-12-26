@@ -7,7 +7,7 @@ xml.feed('xmlns' => "http://www.w3.org/2005/Atom", "xml:lang" => 'en') do
   xml.subtitle('An Instiki Wiki')
   xml.generator('Instiki', 'uri' => "http://golem.ph.utexas.edu/instiki/show/HomePage", 'version' => Instiki::VERSION::STRING)
 
-  for page in @pages_by_revision
+  for page in @pages_by_revision # @pages_by_revision is paginated via Pagy; we intentionally only list the first page
     xml.entry do
      xml.title(page.plain_name, 'type' => "html")
       xml.link('rel' => 'alternate', 'type' => 'application/xhtml+xml', 'href' => url_for(:only_path => false, :web => @web_name, :controller => '/wiki', :action => @link_action, :id => page.name) )

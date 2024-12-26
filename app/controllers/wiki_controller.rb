@@ -160,10 +160,16 @@ EOL
     @pages_that_are_orphaned = @pages_in_category.orphaned_pages
   end
 
+  # 2024-12-27 (ADH): Arbitrary limit of 100 items shown
+
   def recently_revised
-    parse_category
-    @pages_by_revision = @pages_in_category.by_revision
-    @pages_by_day = Hash.new { |h, day| h[day] = [] }
+    self.parse_category()
+
+    @pages_by_revision = @pages_in_category.by_revision.pages
+    @pages_by_day      = Hash.new { |h, day| h[day] = [] }
+
+    @pagy, @pages_by_revision = pagy(@pages_by_revision)
+
     @pages_by_revision.each do |page|
       day = Date.new(page.revised_at.year, page.revised_at.month, page.revised_at.day)
       @pages_by_day[day] << page
@@ -377,8 +383,8 @@ EOL
       redirect_to_page @page_name
 
     rescue InstikiErrors::ValidationError => e
-      logger.error e.message
-      logger.error e.backtrace.join("\n")
+      Rails.logger.error e.message
+      Rails.logger.error e.backtrace.join("\n")
       flash[:error] = e.to_s
       param_hash = {:web => @web_name, :id => @page_name}
       # Work around Rails bug: flash will not display if query string is longer than 10192 bytes
@@ -402,8 +408,8 @@ EOL
       # TODO this rescue should differentiate between errors due to rendering and errors in
       # the application itself (for application errors, it's better not to rescue the error at all)
       rescue => e
-        logger.error e.message
-        logger.error e.backtrace.join("\n")
+        Rails.logger.error e.message
+        Rails.logger.error e.backtrace.join("\n")
         flash[:error] = e.to_s
         if in_a_web?
           redirect_to :action => 'edit', :web => @web_name, :id => @page_name
@@ -522,7 +528,7 @@ EOL
     def parse_category
       @categories = WikiReference.list_categories(@web)
       @category = params['category']
-      if @category
+      if @category.present?
         @set_name = "category '#{@category}'"
         pages = WikiReference.pages_in_category(@web, @category)
         @pages_in_category = PageSet.new(@web, pages)
@@ -535,7 +541,7 @@ EOL
 
     def remote_ip
       ip = request.remote_ip
-      logger.info(ip)
+      Rails.logger.info(ip)
       ip.dup.gsub!(Regexp.union(Resolv::IPv4::Regex, Resolv::IPv6::Regex), '\0') || 'bogus address'
     end
 
