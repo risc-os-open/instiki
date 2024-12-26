@@ -3,6 +3,7 @@
 # but the environment may not be (e.g. it isn't with Passenger).
 
 class ApplicationController < ActionController::Base
+  include Pagy::Backend
 
   # See 'lib/dnsbl_check.rb'.
   #

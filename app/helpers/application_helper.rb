@@ -1,5 +1,6 @@
 # The methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
+  include Pagy::Frontend
 
   # Turn the Hub and Rails flash data into a simple series of H2 entries,
   # with Hub data first, Rails flash data next. A container DIV will hold
