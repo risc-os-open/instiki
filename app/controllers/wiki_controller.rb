@@ -160,8 +160,6 @@ EOL
     @pages_that_are_orphaned = @pages_in_category.orphaned_pages
   end
 
-  # 2024-12-27 (ADH): Arbitrary limit of 100 items shown
-
   def recently_revised
     self.parse_category()
 
