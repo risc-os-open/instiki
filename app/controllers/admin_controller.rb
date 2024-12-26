@@ -98,7 +98,7 @@ class AdminController < ApplicationController
           flash[:info] = "Web '#{params['address']}' was successfully updated"
           redirect_home(params['address'])
         rescue InstikiErrors::ValidationError => e
-          logger.warn e.message
+          Rails.logger.warn e.message
           @error = e.message
           # and re-render the same template again
         end

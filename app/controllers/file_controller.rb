@@ -147,32 +147,32 @@ class FileController < ApplicationController
   private
 
     def import_from_archive(archive)
-      logger.info "Importing pages from #{archive}"
+      Rails.logger.info "Importing pages from #{archive}"
       zip = Zip::ZipInputStream.open(archive)
       while (entry = zip.get_next_entry) do
         ext_length = File.extname(entry.name).length
         page_name = entry.name[0..-(ext_length + 1)]
         page_content = entry.get_input_stream.read
-        logger.info "Processing page '#{page_name}'"
+        Rails.logger.info "Processing page '#{page_name}'"
         begin
           existing_page = @wiki.read_page(@web.address, page_name)
           if existing_page
             if existing_page.content == page_content
-              logger.info "Page '#{page_name}' with the same content already exists. Skipping."
+              Rails.logger.info "Page '#{page_name}' with the same content already exists. Skipping."
               next
             else
-              logger.info "Page '#{page_name}' already exists. Adding a new revision to it."
+              Rails.logger.info "Page '#{page_name}' already exists. Adding a new revision to it."
               wiki.revise_page(@web.address, page_name, page_name, page_content, Time.now, @author, PageRenderer.new)
             end
           else
             wiki.write_page(@web.address, page_name, page_content, Time.now, @author, PageRenderer.new)
           end
         rescue => e
-          logger.error(e)
+          Rails.logger.error(e)
           @problems << "#{page_name} : #{e.message}"
         end
       end
-      logger.info "Import from #{archive} finished"
+      Rails.logger.info "Import from #{archive} finished"
     end
 
 end

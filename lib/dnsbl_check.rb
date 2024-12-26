@@ -41,10 +41,10 @@ module DNSBL_Check
     # Check the remote address against each dnsbl in a separate thread
     DNSBLS.each_key do |dnsbl|
       threads << Thread.new("#$4.#$3.#$2.#$1.#{dnsbl}") do |host|
-        logger.warn("Checking DNSBL #{host}")
+        Rails.logger.warn("Checking DNSBL #{host}")
         addr = Resolv.getaddress("#{host}") rescue ''
         if addr[0,7]=="127.0.0"
-          logger.info("#{request.remote_addr} found using DNSBL #{host}")
+          Rails.logger.info("#{request.remote_addr} found using DNSBL #{host}")
           ban_help << "\n<p>See <a href='#{DNSBLS[dnsbl]}#{request.remote_addr}'>here</a> for more information.</p>"
           passed = false
         end
@@ -56,7 +56,7 @@ module DNSBL_Check
     if passed
 #      $dnsbl_passed = $dnsbl_passed[0,99].unshift request.remote_addr
       $dnsbl_passed.push request.remote_addr
-      logger.warn("#{request.remote_addr} added to DNSBL passed cache")
+      Rails.logger.warn("#{request.remote_addr} added to DNSBL passed cache")
     else
       message = %{
         <p>

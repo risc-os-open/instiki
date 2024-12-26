@@ -173,7 +173,7 @@ class Web < ApplicationRecord
       dummy_file.save
       dummy_file.destroy
     rescue => e
-      logger.error "Failed create files directory for #{address}: #{e}"
+      Rails.logger.error "Failed create files directory for #{address}: #{e}"
       raise "Instiki could not create directory to store uploaded files. " +
             "Please make sure that Instiki is allowed to create directory " +
             "#{dummy_file.content_path.expand_path} and add files to it."

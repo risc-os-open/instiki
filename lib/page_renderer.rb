@@ -62,7 +62,7 @@ class PageRenderer
         diffs.gsub(/\A<div class='xhtmldiff_wrapper'>(.*)<\/div>\Z/m, '\1').gsub(/(<div[^>]+?)\s*?\/>/, "\\1></div>").html_safe
 
       rescue => e
-        logger.error(e)
+        Rails.logger.error(e)
         h(e.message) + "<p><ins class=\"diffins\"><strong>The current and/or previous revision contain invalid markup which is too broken for the diff parser to understand.</strong></ins></p>".html_safe
 
       end
