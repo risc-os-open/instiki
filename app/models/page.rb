@@ -95,6 +95,9 @@ class Page < ApplicationRecord
     web.select.pages_that_reference(name)
   end
 
+  # Finding these in Ruby means that an eager-loaded reference set will be used
+  # instead of forcing a new DB query.
+  #
   def wiki_words
     wiki_references.to_a.select { |ref| ref.wiki_word? }.map { |ref| ref.referenced_name }
   end
@@ -103,12 +106,12 @@ class Page < ApplicationRecord
     wiki_references.to_a.select { |ref| ref.category? }.map { |ref| ref.referenced_name }
   end
 
-  def linked_from
-    web.select.pages_that_link_to(name)
-  end
-
   def redirects
     wiki_references.to_a.select { |ref| ref.redirected_page? }.map { |ref| ref.referenced_name }
+  end
+
+  def linked_from
+    web.select.pages_that_link_to(name)
   end
 
   def included_from
