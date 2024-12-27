@@ -122,29 +122,14 @@ class PageSet
   # references and so cannot be orphans
   # Pages that refer to themselves and have no links from outside are orphans.
   def orphaned_pages
-    never_orphans = (web.authors + ['HomePage']).uniq
-    orphans       = []
+    never_orphans    = @pages.where(name: (web.authors.uniq + ['HomePage']))
+    pages_referenced = @pages.where(id: WikiReference.all_referenced_pages_in(@web).select(:id))
 
-    @pages.find_each do | page |
-      next if never_orphans.include?(page.name) # NOTE EARLY LOOP RESTART
+    not_orphans = @pages
+      .where(id: never_orphans)
+      .or(@pages.where(id: pages_referenced))
 
-      references = (WikiReference.pages_that_reference(@web, page.name) +
-                    WikiReference.pages_redirected_to(@web, page.name)).uniq
-
-      orphans << page if references.empty? or references == [page.name]
-    end
-
-    return orphans
-
-    # self.select { |page|
-    #   if never_orphans.include? page.name
-    #     false
-    #   else
-    #     references = (WikiReference.pages_that_reference(@web, page.name) +
-    #                   WikiReference.pages_redirected_to(@web, page.name)).uniq
-    #     references.empty? or references == [page.name]
-    #   end
-    # }
+    return @pages.where.not(id: not_orphans)
   end
 
   def pages_in_category(category)
@@ -154,8 +139,11 @@ class PageSet
   # Returns all the wiki words in this page set for which
   # there are no pages in this page set's web
   def wanted_pages
-    known_pages = (web.select.names + self.redirected_names).uniq
-    self.wiki_words - known_pages
+    all_current_page_names    = web.pages.pluck(:name)
+    old_names_still_used      = WikiReference.all_referenced_redirection_names_in(web)
+    all_wiki_words_everywhere = self.wiki_words
+
+    return ((all_wiki_words_everywhere - all_current_page_names) - old_names_still_used)
   end
 
   def names
@@ -177,9 +165,6 @@ class PageSet
     words.sort!
 
     return words
-    # self.inject([]) { |wiki_words, page|
-    #     wiki_words + page.wiki_words
-    # }.flatten.uniq.sort
   end
 
 end
