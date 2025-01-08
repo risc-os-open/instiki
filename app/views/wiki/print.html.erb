@@ -1,13 +1,35 @@
-<% 
+<%
   @title = @page.plain_name
   @hide_navigation = true
   @style_additions = ".newWikiWord { background-color: white; font-style: italic; }"
 %>
 
-<%= @renderer.display_content %>
+<style type="text/css">
 
-<div class="byline">
-  <%= @page.revisions? ? "Revised" : "Created" %> on <%= format_date(@page.revised_at) %> 
-  by
-  <%= author_link(@page, { :mode => (@link_mode || :show) }) %>
+  /* Special case for Wiki "print view", which regardless of CSS @print rules
+   * in the base stylesheet, hides ROOL decoration to leave just the main page
+   * content visible.
+   */
+
+  #template_header_2024,
+  #template_navigation,
+  #template_sidebar,
+  #template_footer_2024 {
+    display: none;
+  }
+
+  #template_main {
+    padding-bottom: 0;
+  }
+
+</style>
+
+<div id="pageContent">
+  <%= @renderer.display_content %>
+
+  <div class="byline">
+    <%= @page.revisions? ? "Revised" : "Created" %> on <%= format_date(@page.revised_at) %>
+    by
+    <%= author_link(@page, { :mode => (@link_mode || :show) }) %>
+  </div>
 </div>

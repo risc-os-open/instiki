@@ -1,0 +1,93 @@
+/* The site-wide stylesheet is loaded first, then all of Instiki's styles, then
+ * this stylesheet last - additional ROOL-specific overrides
+ *
+ * These are designed to give a visual impression similar to Acorn's original
+ * PRMs and Style Guide, along with ROOL's updated reprints.
+ */
+
+@font-face {
+  font-family: "PRM";
+  font-weight: normal;
+  src: local("ITC Novarese Std Book");
+}
+
+@font-face {
+  font-family: "PRM";
+  font-weight: normal;
+  font-style: italic;
+  src: local("ITC Novarese Std Book Italic");
+}
+
+@font-face {
+  font-family: "PRM";
+  font-weight: bold;
+  src: local("ITC Novarese Std Bold");
+}
+
+@font-face {
+  font-family: "PRM";
+  font-weight: bold;
+  font-style: italic;
+  src: local("ITC Novarese Std Bold Italic");
+}
+
+@font-face {
+  font-family: "PRM";
+  font-weight: 600;
+  src: local("ITC Novarese Std Medium");
+}
+
+@font-face {
+  font-family: "PRM";
+  font-weight: 600;
+  font-style: italic;
+  src: local("ITC Novarese Std Medium Italic");
+}
+
+@font-face {
+  font-family: "PRM";
+  font-weight: 900;
+  src: local("ITC Novarese Std Ultra");
+}
+
+/* ITC Novarese is the commercial PRM font; EB Garamond is a similar no-charge
+ * font that can be used as a fallback.
+ */
+
+#pageTitle, #pageContent {
+  font-family: "PRM", serif;
+  font-size: 13pt;
+}
+
+/* Similar visual impression to the grey main header underline in real PRMs */
+
+#pageTitle {
+  padding-bottom: 10px;
+  border-bottom: 3px solid #ddd;
+  margin-bottom: 20px;
+}
+
+/* ROOL's side-wide styles define overrides for H3 that need adjustment */
+
+#pageContent h3 {
+  font-family: "PRM", serif;
+  font-weight: 600;
+  font-size: 130%;
+}
+
+/* Ad-hoc emergence of a series of H6 navigation entries at the top of pages
+ * allows us to define a special case set of styles that catch a good many of
+ * these, providing additional visual separation between navigation and body.
+ */
+
+#pageContent h6 + * {
+  margin-top: 30px;
+}
+
+#pageContent h6 + h6, #Content h6:first-child {
+  margin-top: 0px;
+}
+
+#pageContent div.byline {
+  margin-top: 30px;
+}

@@ -10,7 +10,7 @@
     <%= csp_meta_tag %>
 
     <title>
-      <% if @page and (@page.name == 'HomePage') and (%w( show published print ).include?(params['action'])) %>
+      <% if @page and (@page.name == 'HomePage') and (%w( show published print ).include?(action_name)) %>
         <%= h(@web.name) + (@show_diff ? ' (changes)' : '') %>
       <% elsif @web %>
         <%= @title %> in <%= h @web.name %>
@@ -31,6 +31,7 @@
     <%= stylesheet_link_tag '/css/risc_os_open_2024' %>
     <%= stylesheet_link_tag 'instiki'                %>
     <%= stylesheet_link_tag 'syntax'                 %>
+    <%= stylesheet_link_tag 'risc_os_open'           %>
   </head>
 
   <body>
@@ -50,19 +51,21 @@
                 <div class="errorExplanation"><%= ( escape_preserving_linefeeds(@error) ).html_safe %></div>
               <% end %>
 
-              <% if @page and (@page.name == 'HomePage') and %w( show published print ).include?(action_name) %>
-                <h1 id="pageName">
-                  <%= h(@web.name) + (@show_diff ? ' (changes)' : '') %>
-                </h1>
-              <% elsif (@title.blank? == false) %>
-                <h1 id="pageName">
-                  <%= @title %>
-                </h1>
-              <% elsif @web %>
-                <h1 id="pageName">
-                  <span class="webName"><%= h(@web.name) %></span> <%= (@show_diff ? ' (changes)' : '') %>
-                </h1>
-              <% end %>
+              <div id="pageTitle">
+                <% if @page and (@page.name == 'HomePage') and %w( show published print ).include?(action_name) %>
+                  <h1 id="pageName">
+                    <%= h(@web.name) + (@show_diff ? ' (changes)' : '') %>
+                  </h1>
+                <% elsif (@title.blank? == false) %>
+                  <h1 id="pageName">
+                    <%= @title %>
+                  </h1>
+                <% elsif @web %>
+                  <h1 id="pageName">
+                    <span class="webName"><%= h(@web.name) %></span> <%= (@show_diff ? ' (changes)' : '') %>
+                  </h1>
+                <% end %>
+              </div>
 
               <%= yield %>
             </div> <!-- Content -->
