@@ -50,12 +50,12 @@
   src: local("ITC Novarese Std Ultra");
 }
 
-/* ITC Novarese is the commercial PRM font; EB Garamond is a similar no-charge
- * font that can be used as a fallback.
+/* ITC Novarese is the commercial PRM font; Lora is a similar no-charge font
+ * from Google Fonts that can be used as a fallback.
  */
 
 #pageTitle, #pageContent {
-  font-family: "PRM", serif;
+  font-family: "PRM", "Lora", serif;
   font-size: 13pt;
 }
 
@@ -70,7 +70,7 @@
 /* ROOL's side-wide styles define overrides for H3 that need adjustment */
 
 #pageContent h3 {
-  font-family: "PRM", serif;
+  font-family: "PRM", "Lora", serif;
   font-weight: 600;
   font-size: 130%;
 }
@@ -88,6 +88,8 @@
   margin-top: 0px;
 }
 
+/* Push the time and author attribution further from the main content */
+
 #pageContent div.byline {
-  margin-top: 30px;
+  margin-top: 40px;
 }

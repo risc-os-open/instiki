@@ -65,7 +65,7 @@ module WhiteListFormattedContentConcern
         "a"          => ["href"],
         "blockquote" => ["cite"],
         "del"        => ["cite"],
-        "div"        => ["itemscope", "itemtype"],
+        "div"        => ["id", "name", "class", "itemscope", "itemtype"],
         "img"        => ["src", "longdesc", "loading", "alt"],
         "ins"        => ["cite"],
         "q"          => ["cite"],

@@ -10,22 +10,28 @@ require 'chunks/chunk'
 class Category < Chunk::Abstract
 
   CATEGORY_PATTERN = /^(:)?category\s*:(.*)$/i
-  def self.pattern() CATEGORY_PATTERN  end
+
+  def self.pattern()
+    CATEGORY_PATTERN
+  end
 
   attr_reader :hidden, :list
 
-def initialize(match_data, content)
-    super(match_data, content)
+  def initialize(match_data, content)
+    super
+
     @content = content
-    @hidden = match_data[1]
-    @list = match_data[2].split(',').map { |c| clean = c.strip.escapeHTML; clean if clean != ''}
+    @hidden  = match_data[1]
+    @list    = match_data[2].split(',').map { |c| clean = c.strip.escapeHTML; clean if clean != ''}
     @list.compact!
+
     @unmask_text = ''
+
     if @hidden
       @unmask_text = ''
     else
       category_urls = @list.map { |category| url(category) }.join(', ')
-      @unmask_text = '<div class="property"> category: ' + category_urls + '</div>'
+      @unmask_text = '<div class="property">Category: ' + category_urls + '</div>'
     end
   end
 
