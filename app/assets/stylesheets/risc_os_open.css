@@ -1,9 +1,10 @@
-/* The site-wide stylesheet is loaded first, then all of Instiki's styles, then
- * this stylesheet last - additional ROOL-specific overrides
- *
- * These are designed to give a visual impression similar to Acorn's original
- * PRMs and Style Guide, along with ROOL's updated reprints.
+/* This stylesheet is loaded first, then all of Instiki's styles. Apart from
+ * loading the global ROOL stylesheet, it further provides styles that can
+ * optionally give a visual impression similar to Acorn's original PRMs and
+ * Style Guide, along with ROOL's updated reprints.
  */
+
+@import url("https://www.riscosopen.org/css/risc_os_open_2025.css");
 
 @font-face {
   font-family: "PRM";
@@ -54,14 +55,15 @@
  * from Google Fonts that can be used as a fallback.
  */
 
-#pageTitle, #pageContent {
+div.prm_style #pageTitle,
+div.prm_style #pageContent {
   font-family: "PRM", "Lora", serif;
   font-size: 13pt;
 }
 
 /* Similar visual impression to the grey main header underline in real PRMs */
 
-#pageTitle {
+div.prm_style #pageTitle {
   padding-bottom: 10px;
   border-bottom: 3px solid #ddd;
   margin-bottom: 20px;
@@ -69,7 +71,7 @@
 
 /* ROOL's side-wide styles define overrides for H3 that need adjustment */
 
-#pageContent h3 {
+div.prm_style #pageContent h3 {
   font-family: "PRM", "Lora", serif;
   font-weight: 600;
   font-size: 130%;
@@ -80,16 +82,17 @@
  * these, providing additional visual separation between navigation and body.
  */
 
-#pageContent h6 + * {
+div.prm_style #pageContent h6 + * {
   margin-top: 30px;
 }
 
-#pageContent h6 + h6, #Content h6:first-child {
+div.prm_style #pageContent h6 + h6,
+div.prm_style #pageContent h6:first-child {
   margin-top: 0px;
 }
 
 /* Push the time and author attribution further from the main content */
 
-#pageContent div.byline {
+div.prm_style #pageContent div.byline {
   margin-top: 40px;
 }
