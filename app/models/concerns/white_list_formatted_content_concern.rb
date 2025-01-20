@@ -150,6 +150,7 @@ module WhiteListFormattedContentConcern
   #
   class RedClothAndAutoLinkConvertFilter < HTMLPipeline::ConvertFilter
     include ActionView::Helpers::TextHelper
+    include ActionView::Helpers::UrlHelper
 
     def call(text, context: @context)
       html = RedCloth.new(text).to_html()
@@ -158,7 +159,7 @@ module WhiteListFormattedContentConcern
       # that via the HTML pipeline; Auto Link's variant is very aggressive..
       #
       html = auto_link(html, sanitize: false) do | link_text |
-        truncate(link_text, length: 55, omission: '&hellip;')
+        truncate(link_text, length: 55, omission: '…')
       end
 
       return html
