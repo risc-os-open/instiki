@@ -1,0 +1,16 @@
+<%=
+  hash = if Rails.env.production?
+    {
+      class:   '500',
+      message: 'Sorry, something went wrong. Please contact ROOL if this error persists via webmaster@riscosopen.org'
+    }
+  else
+    {
+      class:      exception.class.name,
+      message:    exception.message,
+      backgtrace: exception.backtrace
+    }
+  end
+
+  JSON.pretty_generate(hash).html_safe()
+%>

@@ -246,6 +246,27 @@ class ApplicationController < ActionController::Base
       return true
     end
 
+    # Used for the unusual range of ".foo" formats that might arise for a
+    # family of XML-based responses; #on_error_rotate_and_raise needs to
+    # know what the format in which to render an error.
+    #
+    XML_LIKE_MAP = {
+      xml:           'application/xml',
+      rss:           'application/rss+xml',
+      rss20:         'application/rss+xml',
+      atom:          'application/atom+xml',
+      atom10:        'application/atom+xml',
+      rsd:           'application/rsd+xml',
+      googlesitemap: 'application/xml',
+    }
+
+    XML_LIKE_MAP.each do | format, mime |
+      known_mime = Mime::Type.lookup_by_extension(format)
+      Mime::Type.register(mime, format) if known_mime.blank?
+    end
+
+    XML_LIKE_FORMATS = XML_LIKE_MAP.keys.freeze
+
     # Renders an exception, retaining Hub login. Regenerate any exception
     # within five seconds of a previous render to 'raise' to default Rails
     # error handling, which (in non-Production modes) gives additional
@@ -262,7 +283,20 @@ class ApplicationController < ActionController::Base
       end
 
       session[:last_exception_at] = Time.now.iso8601(1)
-      render 'exception', formats: [:html], locals: { exception: exception }
+      locals                      = { exception: exception }
+
+      # Depending on application, XML variants can be numerous - e.g. ".rss",
+      # ".rss20" and so-on - so use that as a default for anything that is not
+      # otherwise explicitly recognised as a JSON or HTML request.
+      #
+      respond_to do | format |
+        format.html { render 'exception', locals: locals }
+        format.json { render 'exception', locals: locals, formats: :json }
+
+        format.any(*XML_LIKE_FORMATS) do
+          render 'exception', locals: locals, formats: :xml
+        end
+      end
     end
 
 end
