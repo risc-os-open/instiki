@@ -324,13 +324,17 @@ EOL
   end
 
   def revision
-    get_page_and_revision
+    success = self.get_revision_information()
+    return if success == false # NOTE EARLY ACCESS
+
     @show_diff = (params[:mode] == 'diff')
     @renderer = PageRenderer.new(@revision)
   end
 
   def rollback
-    get_page_and_revision
+    success = self.get_revision_information()
+    return if success == false # NOTE EARLY ACCESS
+
     if @page.locked?(Time.now) and not params['break_lock']
       redirect_to :web => @web_name, :action => 'locked', :id => @page_name
     else
@@ -403,8 +407,14 @@ EOL
         @renderer = PageRenderer.new(@page.revisions.last)
         @show_diff = (params[:mode] == 'diff')
         render :action => 'page'
-      # TODO this rescue should differentiate between errors due to rendering and errors in
-      # the application itself (for application errors, it's better not to rescue the error at all)
+
+      # The idea here is to rescue a rendering error that is clearly a bug, but
+      # might well be circumvented by editing the page since it's the page's
+      # content that probably triggered the bug.
+      #
+      # Really, rescuing just exceptions that are known to raise this way would
+      # make more sense, but that falls under "unknown unknowns".
+      #
       rescue => e
         Rails.logger.error e.message
         Rails.logger.error e.backtrace.join("\n")
@@ -514,13 +524,28 @@ EOL
       send_file file_path
     end
 
-    def get_page_and_revision
+    # Returns +true+ if successful; @revision will be set. Returns +false+ if
+    # e.g. @page is unset, due to things like old links to revisions of
+    # since-deleted pages being used. In that latter case, redirection will
+    # have already occurred if a page name is known to allow for page
+    # (re)creation - so do not render further; else a "not found" exception is
+    # broadcast.
+    #
+    def get_revision_information
+      if @page.nil?
+        raise ActiveRecord::RecordNotFound unless @page_name.present?
+        redirect_to action: 'show', id: @page_name
+        return false # NOTE EARLY EXIT
+      end
+
       if params['rev']
         @revision_number = params['rev'].to_i
       else
         @revision_number = @page.revisions.size
       end
+
       @revision = @page.revisions[@revision_number - 1]
+      return true
     end
 
     def parse_category
