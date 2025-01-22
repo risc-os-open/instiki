@@ -68,11 +68,11 @@ class Web < ApplicationRecord
   def has_page?(name)
     @has_page_per_request_cache ||= {}
 
-    unless @has_page_per_request_cache.key?(:name)
-      @has_page_per_request_cache[:name] = pages.where(name: name).any?
+    unless @has_page_per_request_cache.key?(name)
+      @has_page_per_request_cache[name] = pages.where(name: name).any?
     end
 
-    @has_page_per_request_cache[:name]
+    @has_page_per_request_cache[name]
   end
 
   def has_redirect_for?(name)

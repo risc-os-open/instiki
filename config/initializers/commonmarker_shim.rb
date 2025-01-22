@@ -1,6 +1,6 @@
 # Despite being at (at the time of writing) a very recent v5 release, the
-# GitHub Markdown gem is not compatible with the CommonMarker v1 gem that
-# has been around a while before it. This works around the problem.
+# GitHub Markdown gem is not compatible with the CommonMarker v1 or v2 gems
+# that have been around a while before it. This works around the problem.
 #
 class CommonMarker
   def self.render_html(content, commonmarker_opts, commonmarker_exts)

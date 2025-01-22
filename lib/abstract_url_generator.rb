@@ -35,20 +35,20 @@ class AbstractUrlGenerator
     text = (text || WikiWords.separate(asked_name)).unescapeHTML.escapeHTML
 
     case link_type
-    when :show
-      page_link(mode, name, text, web.address, known_page, web)
-    when :file
-      file_link(mode, name, text, web.address, known_page, description)
-    when :pic
-      pic_link(mode, name, text, web.address, known_page)
-    when :audio
-      media_link(mode, name, text, web.address, known_page, 'audio')
-    when :video
-      media_link(mode, name, text, web.address, known_page, 'video')
-    when :delete
-      delete_link(mode, name, web.address, known_page)
-    else
-      raise "Unknown link type: #{link_type}"
+      when :show
+        page_link(mode, name, text, web.address, known_page, web)
+      when :file
+        file_link(mode, name, text, web.address, known_page, description)
+      when :pic
+        pic_link(mode, name, text, web.address, known_page)
+      when :audio
+        media_link(mode, name, text, web.address, known_page, 'audio')
+      when :video
+        media_link(mode, name, text, web.address, known_page, 'video')
+      when :delete
+        delete_link(mode, name, web.address, known_page)
+      else
+        raise "Unknown link type: #{link_type}"
     end
   end
 

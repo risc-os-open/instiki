@@ -39,3 +39,7 @@
 
 # Ignore files uploaded during testing.
 /webs
+
+# Ignore NPM output.
+package-lock.json
+node_modules/

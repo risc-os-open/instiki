@@ -1,0 +1,2 @@
+web: unset PORT && bundle exec bin/rails server
+jav: yarn dev:build:js

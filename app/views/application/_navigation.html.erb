@@ -17,7 +17,7 @@
     <li><%= list_item 'Recently Revised', {:action =>'recently_revised'}, 'Pages sorted by when they were last changed', 'U' %></li>
     <li><%= list_item 'Authors', {:action => 'authors'}, 'Who wrote what' %></li>
     <li><%= list_item 'Feeds', {:action => 'feeds'}, 'Subscribe to changes by Atom' %></li>
-<%   if hubssolib_logged_in? && hubssolib_authorized?( :export, WikiController ) %>
+<%   false && if hubssolib_logged_in? && hubssolib_authorized?( :export, WikiController ) %>
     <li><%= list_item 'Export', {:action => 'export'}, 'Download a zip with all the pages in this wiki', 'X' %></li>
 <%   end %>
 <% else %>
