@@ -18,24 +18,17 @@ gem 'ostruct', '~> 0.6'
 #
 gem 'tzinfo-data'
 
-# Reduces boot times through caching; required in config/boot.rb
-#
-gem 'bootsnap', require: false
-
-# Use SCSS for stylesheets via a robust preprocessing step:
-# https://rubygems.org/gems/cssbundling-rails/
+# Use SCSS for stylesheets via a robust preprocessing step [https://rubygems.org/gems/cssbundling-rails/]
 #
 gem 'cssbundling-rails' # ...using whatever version Rails wants
 
 # Use a robust preprocessing step for JavaScript, too; this lets us manage any
 # components available in NPM that have both JS and CSS components using the
-# same mechanism (Yarn):
-# https://rubygems.org/gems/jsbundling-rails/
+# same mechanism (Yarn) [https://rubygems.org/gems/jsbundling-rails/]
 #
 gem 'jsbundling-rails' # ...using whatever version Rails wants
 
-# Rails 7+ 'modern' asset pipeline:
-# https://rubygems.org/gems/propshaft
+# Rails 7+ 'modern' asset pipeline [https://rubygems.org/gems/propshaft]
 #
 gem 'propshaft', '~> 1.1'
 
@@ -84,8 +77,11 @@ gem 'diff-lcs', '~> 1.5'
 gem 'builder', '~> 3.3'
 
 group :development, :test do
+
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
+  #
   gem 'debug', platforms: %i[ mri windows ]
+
 end
 
 # Monitoring and alerting [http://rubygems.org/gems/newrelic_rpm]
@@ -93,7 +89,6 @@ end
 gem 'newrelic_rpm'
 
 group :development do
-  gem 'error_highlight', '>= 0.4.0', platforms: [:ruby]
 
   # Use console on exceptions pages [https://github.com/rails/web-console]
   #
@@ -112,10 +107,14 @@ group :development do
   #   puts Niceql::Prettifier.prettify_sql(some_ar_statement.to_sql)
   #
   gem 'niceql', '~> 0.6'
+
 end
 
 group :test do
+
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
+  #
   gem 'capybara'
   gem 'selenium-webdriver'
+
 end

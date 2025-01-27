@@ -82,8 +82,6 @@ GEM
     benchmark (0.4.0)
     bigdecimal (3.1.9)
     bindex (0.8.1)
-    bootsnap (1.18.4)
-      msgpack (~> 1.2)
     builder (3.3.0)
     capybara (3.40.0)
       addressable
@@ -109,7 +107,6 @@ GEM
       reline (>= 0.3.8)
     diff-lcs (1.5.1)
     drb (2.2.1)
-    error_highlight (0.7.0)
     erubi (1.13.1)
     eventmachine (1.2.7)
     faye-websocket (0.11.3)
@@ -155,7 +152,6 @@ GEM
     mini_mime (1.1.5)
     mini_portile2 (2.8.8)
     minitest (5.25.4)
-    msgpack (1.7.5)
     mustermann (3.0.3)
       ruby2_keywords (~> 0.0.1)
     net-imap (0.5.5)
@@ -166,6 +162,7 @@ GEM
     net-protocol (0.2.2)
       timeout
     net-smtp (0.5.0)
+    newrelic_rpm (9.16.1)
     niceql (0.6.1)
     nio4r (2.7.4)
     nokogiri (1.18.2)
@@ -298,20 +295,19 @@ PLATFORMS
 DEPENDENCIES
   RedCloth (~> 4.3)
   acts_as_list (~> 1.2)
-  bootsnap
   builder (~> 3.3)
   capybara
   commonmarker (~> 2.0)
   cssbundling-rails
   debug
   diff-lcs (~> 1.5)
-  error_highlight (>= 0.4.0)
   foreman
   github-markup (~> 5.0)
   html-pipeline (~> 3.2)
   hubssolib (~> 2.1)
   jsbundling-rails
   mailcatcher
+  newrelic_rpm
   niceql (~> 0.6)
   ostruct (~> 0.6)
   pagy (~> 9.3)
