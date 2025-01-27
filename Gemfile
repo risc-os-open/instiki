@@ -88,6 +88,10 @@ group :development, :test do
   gem 'debug', platforms: %i[ mri windows ]
 end
 
+# Monitoring and alerting [http://rubygems.org/gems/newrelic_rpm]
+#
+gem 'newrelic_rpm'
+
 group :development do
   gem 'error_highlight', '>= 0.4.0', platforms: [:ruby]
 
