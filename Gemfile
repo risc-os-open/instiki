@@ -76,6 +76,10 @@ gem 'diff-lcs', '~> 1.5'
 #
 gem 'builder', '~> 3.3'
 
+# Monitoring and alerting [http://rubygems.org/gems/newrelic_rpm]
+#
+gem 'newrelic_rpm'
+
 group :development, :test do
 
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -83,10 +87,6 @@ group :development, :test do
   gem 'debug', platforms: %i[ mri windows ]
 
 end
-
-# Monitoring and alerting [http://rubygems.org/gems/newrelic_rpm]
-#
-gem 'newrelic_rpm'
 
 group :development do
 
