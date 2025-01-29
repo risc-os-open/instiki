@@ -4,6 +4,6 @@
     { id: 'navigationSearchForm', method: 'get' }
   ) do
 %>
-  <%= text_field_tag('query', params[:query], { id: 'searchField' }) %>
+  <%= text_field_tag('query', params[:query], { id: 'searchField', size: '15' }) %>
   <%= submit_tag('Go') %>
 <% end %>

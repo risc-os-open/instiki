@@ -366,8 +366,8 @@ EOL
       filter_spam(the_content)
       # 2011-01-14 (ADH): Don't use "as_bytes" in this context. See changes to
       #                   "lib/string_support.rb".
-      # cookies['author'] = { :value => author_name.dup, :expires => Time.utc(2030) }
-      cookies['author'] = { :value => author_name.dup.as_bytes, :expires => Time.utc(2030) }
+      # cookies['instikiapp_author'] = { :value => author_name.dup, :expires => Time.utc(2030) }
+      cookies['instikiapp_author'] = { :value => author_name.dup.as_bytes, :expires => Time.utc(2030) }
       if @page
         new_name = params['new_name'] ? params['new_name'] : @page_name
         new_name = @page_name if new_name.empty?

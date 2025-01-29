@@ -85,7 +85,6 @@
             <div class="template_sidebar_node" id="search">
               <h3>Search the Wiki</h3>
 
-              <p />
               <%= render partial: 'search' %>
             </div>
           <% end %>
@@ -93,7 +92,6 @@
           <%= render 'shared/fixed_sidebar' %>
 
           <% unless @web.nil? || @hide_navigation %>
-            <p />
             <div class="template_sidebar_node">
               <h3>Navigation</h3>
               <%= render partial: 'navigation' %>

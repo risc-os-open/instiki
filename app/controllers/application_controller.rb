@@ -97,7 +97,7 @@ class ApplicationController < ActionController::Base
       @action_name = params['action'] || 'index'
       @web_name = params['web']
       @wiki = wiki
-      @author = cookies['author'] || 'AnonymousCoward'
+      @author = cookies['instikiapp_author'] || 'AnonymousCoward'
       if @web_name
         @web = @wiki.webs[@web_name]
         if @web.nil?
@@ -122,12 +122,7 @@ class ApplicationController < ActionController::Base
     end
 
     def password_check(password)
-      if password == @web.password
-        cookies[CGI.escape(@web_name)] = password
-        true
-      else
-        false
-      end
+      password == @web.password
     end
 
     def password_error(password)
@@ -232,7 +227,6 @@ class ApplicationController < ActionController::Base
     def authorized?
       @web.nil? or
       @web.password.nil? or
-      cookies[CGI.escape(@web_name)] == @web.password or
       password_check(params['password'])
     end
 
