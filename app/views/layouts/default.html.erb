@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="robots" content="<%= @robots_metatag_value %>" />
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= Sentry.get_trace_propagation_meta.html_safe %>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 

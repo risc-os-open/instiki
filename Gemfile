@@ -76,9 +76,15 @@ gem 'diff-lcs', '~> 1.5'
 #
 gem 'builder', '~> 3.3'
 
-# Monitoring and alerting [http://rubygems.org/gems/newrelic_rpm]
+# Monitoring and alerting [http://sentry.io]
 #
-gem 'newrelic_rpm'
+# * https://rubygems.org/gems/stackprof
+# * https://rubygems.org/gems/sentry-ruby
+# * https://rubygems.org/gems/sentry-rails
+#
+gem 'stackprof'
+gem 'sentry-ruby'
+gem 'sentry-rails'
 
 group :development, :test do
 
