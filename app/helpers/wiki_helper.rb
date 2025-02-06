@@ -16,7 +16,7 @@ module WikiHelper
     menu << edit_page
     # 2011-03-14 (ADH): Hub integration.
     # menu << edit_web if @page.name == "HomePage"
-    menu << edit_web if @page.name == "HomePage" && hubssolib_logged_in? && hubssolib_authorized?( :edit_web, WikiController )
+    menu << edit_web if @page.name == "HomePage" && hubssolib_logged_in? && hubssolib_authorized?( :edit_web, AdminController )
     if @page.revisions.size > 1
       menu << back_for_page
       menu << see_or_hide_changes_for_page
