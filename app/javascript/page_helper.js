@@ -161,11 +161,26 @@ function updateSize(elt, w, h) {
 
 function resizeableTextarea() {
 //make the textarea resize to fit available space
+  const stateCookieName = 'instikiapp_markup_help';
+  var isInitiallyHidden = !! Cookies.get(stateCookieName);
   var f = $('MarkupHelp');
+
   if (f) {
     var hidebutton = new Element('input', {id:'hidebutton', type:'button', value: 'Hide markup help'});
     f.insert({before: hidebutton});
   }
+
+  function showHelp() {
+    f.show();
+    hidebutton.writeAttribute({value: 'Hide markup help'});
+    Cookies.expire(stateCookieName);
+  }
+  function hideHelp() {
+    f.hide();
+    hidebutton.writeAttribute({value: 'Show markup help'});
+    Cookies.set(stateCookieName, 'hidden');
+  }
+
   $$('textarea#content').each( function(textarea)  {
     var w = textarea.getWidth()/textarea.getAttribute('cols');
     var h = textarea.getStyle('lineHeight').replace(/(\d*)px/, "$1");
@@ -176,17 +191,15 @@ function resizeableTextarea() {
       });
     }
     Event.observe(hidebutton, 'click', function(){
-      if (f.visible()) {
-        f.hide();
-        hidebutton.writeAttribute({value: 'Show markup help'});
-        updateSize(textarea, w, h)
+      if (f && f.visible()) {
+        hideHelp();
       } else {
-        f.show();
-        hidebutton.writeAttribute({value: 'Hide markup help'});
-        updateSize(textarea, w, h)
+        showHelp();
       }
+      updateSize(textarea, w, h);
     });
     Event.observe(window, 'resize', function(){ updateSize(textarea, w, h) });
+    if (isInitiallyHidden) hideHelp();
     updateSize(textarea, w, h);
    });
 }
