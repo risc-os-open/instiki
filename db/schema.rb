@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2010_01_01_192755) do
+ActiveRecord::Schema[8.0].define(version: 2010_01_01_192755) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+  enable_extension "pg_catalog.plpgsql"
 
   create_table "pages", id: :serial, force: :cascade do |t|
     t.datetime "created_at", precision: nil, null: false
@@ -81,5 +81,4 @@ ActiveRecord::Schema[7.1].define(version: 2010_01_01_192755) do
     t.index ["page_id"], name: "index_wiki_references_on_page_id"
     t.index ["referenced_name"], name: "index_wiki_references_on_referenced_name"
   end
-
 end
