@@ -2,11 +2,10 @@
   "name": "typo",
   "private": true,
   "dependencies": {
-    "nodemon": "^3.1"
+    "nodemon": "^3.1.9"
   },
   "scripts": {
     "build:js": "cat app/javascript/libraries/cookies.js app/javascript/libraries/prototype.js app/javascript/libraries/scriptaculous.js app/javascript/libraries/effects.js app/javascript/libraries/builder.js app/javascript/libraries/controls.js app/javascript/libraries/dragdrop.js app/javascript/libraries/slider.js app/javascript/auto_sections.js app/javascript/edit_web.js app/javascript/page_helper.js app/javascript/instiki.js > app/assets/builds/application.js",
-
     "dev:build:js": "nodemon --watch app/javascript -e js -x \"npm run build:js\""
   }
 }

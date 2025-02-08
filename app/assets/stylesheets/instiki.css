@@ -17,6 +17,9 @@ text-align:left;
   margin-bottom: 20px;
 }
 
+#Content table tr > th { padding: 6px 8px; }
+#Content table tr > td { padding: 6px 8px; }
+
 .newWikiWord {
   padding-left: 4px;
   padding-right: 4px;

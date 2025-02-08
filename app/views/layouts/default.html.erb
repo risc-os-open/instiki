@@ -83,7 +83,7 @@
         <div id="template_sidebar_content">
           <% if params['action'] != 'published' && @web.present? %>
             <div class="template_sidebar_node" id="search">
-              <h3>Search the Wiki</h3>
+              <h3>Search <%= @web.name.downcase %></h3>
 
               <%= render partial: 'search' %>
             </div>
