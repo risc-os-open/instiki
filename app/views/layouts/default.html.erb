@@ -10,6 +10,7 @@
     <%= csp_meta_tag %>
 
     <title>
+      RISC OS Open:
       <% if @page and (@page.name == 'HomePage') and (%w( show published print ).include?(action_name)) %>
         <%= h(@web.name) + (@show_diff ? ' (changes)' : '') %>
       <% elsif @web %>
@@ -83,9 +84,12 @@
         <div id="template_sidebar_content">
           <% if params['action'] != 'published' && @web.present? %>
             <div class="template_sidebar_node" id="search">
-              <h3>Search <%= @web.name.downcase %></h3>
+              <h3>Search</h3>
 
-              <%= render partial: 'search' %>
+              <%= form_with(url: search_path(web: @web.address), method: :get, class: 'search_form') do |f| %>
+                <%= f.search_field(:query, value: params[:query], size: 14, placeholder: "Search #{@web.name.downcase}") %>
+                <%= f.submit('Go') %>
+              <% end %>
             </div>
           <% end %>
 
