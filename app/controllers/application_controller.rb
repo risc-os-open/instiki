@@ -279,6 +279,8 @@ class ApplicationController < ActionController::Base
       session[:last_exception_at] = Time.now.iso8601(1)
       locals                      = { exception: exception }
 
+      Sentry.capture_exception(exception)
+
       # Depending on application, XML variants can be numerous - e.g. ".rss",
       # ".rss20" and so-on - so use that as a default for anything that is not
       # otherwise explicitly recognised as a JSON or HTML request.
