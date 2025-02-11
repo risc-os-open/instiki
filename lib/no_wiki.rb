@@ -1,4 +1,4 @@
-require 'chunks/chunk'
+require 'chunk/abstract'
 
 # This chunks allows certain parts of a wiki page to be hidden from the
 # rest of the rendering pipeline. It should be run at the beginning

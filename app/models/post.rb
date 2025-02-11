@@ -5,8 +5,6 @@ class Post < ApplicationRecord
   belongs_to :user,  counter_cache: true
   belongs_to :topic, counter_cache: true
 
-  format_attribute :body
-
   before_validation do | post |
     post.forum = post.topic.forum
   end

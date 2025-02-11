@@ -1,6 +1,6 @@
 $: << File.dirname(__FILE__) + "../../lib"
 
-require_dependency 'chunks/chunk'
+require_dependency 'chunk/abstract'
 
 require 'redcloth'
 require 'commonmarker'

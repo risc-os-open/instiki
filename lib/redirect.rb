@@ -1,10 +1,10 @@
-require 'chunks/wiki'
+require 'wiki_chunk'
 
 #      [[!redirects Foo]]
 # redirects Wikilinks for the (nonexistent) page "Foo" to this page.
 # If "Foo" exists, then the Redirect has no effect. But if "Foo"
 # does not exist, then a Wikilink [[Foo]] will produce a link to this
-# page, rather than produce a create-a-new-page link. 
+# page, rather than produce a create-a-new-page link.
 
 class Redirect < WikiChunk::WikiReference
 

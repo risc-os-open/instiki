@@ -1,4 +1,4 @@
-require 'chunks/chunk'
+require 'chunk/abstract'
 
 # These are basic chunks that have a pattern and can be protected.
 # They are used by rendering process to prevent wiki rendering
@@ -20,11 +20,11 @@ module Literal
     PRE_BLOCKS = "a|pre|code|math"
     PRE_PATTERN = Regexp.new('<('+PRE_BLOCKS+')\b[^>]*?>.*?</\1>', Regexp::MULTILINE)
     def self.pattern() PRE_PATTERN end
-  end 
+  end
 
   # A literal chunk that protects HTML tags from wiki rendering.
   class Tags < AbstractLiteral
-    TAGS_PATTERN = Regexp.new('</?[-a-zA-Z:]+\b[^>]*?>', Regexp::MULTILINE) 
+    TAGS_PATTERN = Regexp.new('</?[-a-zA-Z:]+\b[^>]*?>', Regexp::MULTILINE)
     def self.pattern() TAGS_PATTERN  end
   end
 

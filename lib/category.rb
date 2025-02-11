@@ -1,4 +1,4 @@
-require 'chunks/chunk'
+require 'chunk/abstract'
 
 # The category chunk looks for "category: news" on a line by
 # itself and parses the terms after the ':' as categories.

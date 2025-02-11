@@ -1,11 +1,11 @@
 require 'cgi'
-require 'chunks/engines'
-require 'chunks/category'
-require_dependency 'chunks/include'
-require_dependency 'chunks/redirect'
-require_dependency 'chunks/wiki'
-require_dependency 'chunks/literal'
-require 'chunks/nowiki'
+require 'engines'
+require 'category'
+require_dependency 'include'
+require_dependency 'redirect'
+require_dependency 'wiki_chunk'
+require_dependency 'literal'
+require 'no_wiki'
 
 
 # Wiki content is just a string that can process itself with a chain of

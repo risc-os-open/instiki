@@ -1,4 +1,4 @@
-require 'chunks/chunk'
+require 'chunk/abstract'
 
 # Contains all the methods for finding and replacing wiki related links.
 module WikiChunk

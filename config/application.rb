@@ -59,6 +59,8 @@ module Instiki
       autoloader.inflector.inflect(
         'dnsbl_check' => 'DNSBL_Check',
         'xhtml_diff'  => 'XHTMLDiff',
+        'rexml'       => 'REXML',
+        'uri_chunk'   => 'URIChunk',
       )
     end
 
