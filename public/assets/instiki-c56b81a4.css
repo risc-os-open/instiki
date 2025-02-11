@@ -1,0 +1,359 @@
+.skipNav {
+position:relative;
+left:-1000em;
+font-size:0em;
+display: none;
+}
+
+#Container {
+text-align:center;
+}
+
+#Content {
+text-align:left;
+}
+
+#Content table {
+  margin-bottom: 20px;
+}
+
+#Content table tr > th { padding: 6px 8px; }
+#Content table tr > td { padding: 6px 8px; }
+
+.newWikiWord {
+  padding-left: 4px;
+  padding-right: 4px;
+  background-color: #ddd;
+  border: 1px solid #ddd;
+}
+
+.newWikiWord a {
+  margin-left: 4px;
+  padding-left: 4px;
+  padding-right: 4px;
+  border: 1px dotted red;
+  color: red;
+}
+
+.newWikiWord a:hover {
+  color: white;
+  background: red;
+  border-color: white;
+}
+
+.deleteWikiWord {
+background-color:#FCC;
+border: 3px solid blue;
+padding: 2px;
+}
+
+.deleteWikiWord:hover, .deleteWikiWord a:hover {
+background-color:#F88;
+}
+
+.navOn {
+color:#444;
+font-weight:bold;
+text-decoration:none;
+}
+
+div.help {
+font-family:verdana, arial, helvetica, sans-serif;
+font-size:75%;
+}
+
+div.inputBox {
+background-color:#EEE;
+font-family:verdana, arial, helvetica, sans-serif;
+font-size:80%;
+margin-bottom:1.5em;
+padding:0.3em;
+}
+
+blockquote {
+display:block;
+font-size:90%;
+font-style:italic;
+line-height:1.5em;
+margin:0 0 1.5em;
+padding:0 2.5em;
+}
+
+pre {
+overflow:auto;
+}
+
+ol.setup {
+font-size:110%;
+margin-top:1em;
+padding-left:1.5em;
+}
+
+.byline {
+color:#666;
+font-size:.8em;
+font-style:italic;
+margin-bottom:1em;
+padding-top:1px;
+}
+
+p.show_diff {
+background: #eee;
+padding: 3px;
+border: 1px solid silver;
+font-size:.85em;
+}
+
+span.views, span.linked {
+  font-size:.85em;
+}
+.views a, .linked a {
+  font-weight: normal
+}
+span.revisions {
+  font-size:.95em
+}
+span.views.space_above:before {
+  content: ' ';
+  display: block;
+  padding-top: 5px;
+}
+
+#allPages, #wantedPages {
+float: left;
+width: 280px;
+}
+#allPages {
+margin-right: 30px;
+}
+#allPages h2, #wantedPages h2 {
+font-size: 1.2em;
+}
+#allPages label {
+font-size: .8em;
+}
+
+#categories {
+  margin: 20px 0;
+}
+
+.pageType {
+font-size: .75em;
+font-style: italic;
+}
+
+p.pageStats, span.unlock {
+font-size: .85em;
+}
+
+#revision del, #revision del * {
+background-color:#FAA;
+text-decoration:line-through;
+}
+
+#revision ins, #revision ins * {
+background-color:#AFA;
+text-decoration: underline;
+}
+
+div.web_normal {
+	padding:4px;
+}
+
+div.web_protected {
+	padding:4px;
+	background-color:#DDD;
+}
+
+div.inputFieldWithPrompt {
+margin:0.75em 0;
+}
+
+div#editFormButtons {
+margin:0.5em 0 0;
+}
+
+div#editFormButtons span {
+white-space:nowrap;
+}
+
+div#editForm textarea#content {
+}
+
+input#hidebutton {
+  margin: 5px 0 15px 0;
+}
+
+div#MarkupHelp {
+  float: right;
+  width: 25%;
+}
+
+div#MarkupHelp table {
+  border: 1px solid #BBB;
+  border-bottom: none;
+}
+
+div#MarkupHelp td {
+  border-bottom:1px solid #BBB;
+  font-size:80%;
+  margin:0;
+  padding:0.2em;
+  vertical-align:top;
+  white-space:nowrap;
+}
+
+div#MarkupHelp td.arrow {
+  color:#666;
+  padding:0 0.75em 0 0;
+}
+
+div#MarkupHelp h2 {
+  font-size: 110%;
+  padding: 0;
+  margin: 30px 0 0 0;
+}
+
+div#MarkupHelp > h2:first-child {
+  margin-top: 0;
+}
+
+div#MarkupHelp h3 {
+  font-size:90%;
+  font-weight:bold;
+  margin:0 0 5px;
+  padding:5px 0 0;
+}
+
+div#MarkupHelp p {
+  font-size: 80%;
+}
+
+div.rightHandSide {
+  border-left:1px dotted #ccc;
+  border-bottom:1px dotted #ccc;
+  float:right;
+  font-size:80%;
+  margin-left:0.7em;
+  padding-left:1.5em;
+  width:25%;
+}
+
+.newsList {
+margin-top:1.5em;
+}
+
+.newsList p {
+margin-bottom:2.5em;
+}
+
+.property {
+color:#666;
+font-size:80%;
+}
+
+textarea#content {
+font-size: 1em;
+line-height: 1.125;
+}
+
+ul#sortable_pages {
+list-style-type:none;
+padding-left:0;
+}
+ul#sortable_pages li {
+border: 1px solid #FFF;
+}
+ul#sortable_pages li:hover, ul#sortable_pages li:focus {
+border: 1px solid blue;
+}
+
+merror {display:inline;font-size:1em;}
+math[display=block] {overflow:auto;}
+math { white-space: nowrap }
+.blockquotesource {margin-left:1em;}
+span.keyboard {
+ background: #CCC;
+ color: #000;
+ border: outset 2px;
+ font-family:verdana, arial, sans-serif;
+ font-size: .7em;
+ margin-left:5px;
+ padding:1px 2px;
+}
+.centeredfigure {
+ position:relative;
+ margin:auto;
+ text-align:center;
+}
+
+body {counter-reset: theorem lemma proposition corollary definition example remark note}
+.un_theorem *, .num_theorem *,
+.un_lemma *, .num_lemma *,
+.un_prop *, .num_prop *,
+.un_cor *, .num_cor * {font-style: italic}
+span.theorem_label {font-style:normal; font-weight:bold;}
+.proof span.theorem_label {font-style:italic;}
+.num_theorem .theorem_label:after {
+   content: " " counter(theorem); counter-increment: theorem;}
+.num_lemma .theorem_label:after {
+   content: " " counter(lemma); counter-increment: lemma;}
+.num_prop .theorem_label:after {
+   content: " " counter(proposition); counter-increment: proposition;}
+.num_cor .theorem_label:after {
+   content: " " counter(corollary); counter-increment: corollary;}
+.num_defn .theorem_label:after {
+   content: " " counter(definition); counter-increment: definition;}
+.num_example .theorem_label:after {
+   content: " " counter(example); counter-increment: example;}
+.num_remark .theorem_label:after {
+   content: " " counter(remark); counter-increment: remark;}
+.num_note .theorem_label:after {
+   content: " " counter(note); counter-increment: note;}
+
+/* Hack for Mozilla bug 449396 */
+[mathvariant="bold"] *  {
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+}
+[mathvariant="italic"] *  {
+  font-style: italic;
+  font-variant: normal;
+  font-weight: normal;
+}
+[mathvariant="bold-italic"] *  {
+  font-style: italic;
+  font-variant: normal;
+  font-weight: bold;
+}
+[mathvariant="sans-serif"] *  {
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+}
+[mathvariant="bold-sans-serif"] *  {
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+}
+[mathvariant="sans-serif-italic"] *  {
+  font-style: italic;
+  font-variant: normal;
+  font-weight: normal;
+}
+[mathvariant="sans-serif-bold-italic"] *  {
+  font-style: italic;
+  font-variant: normal;
+  font-weight: bold;
+}
+[actiontype="toggle"]:hover {text-shadow: #ccc 2px 2px 5px;}
+
+/* Table of contents (see auto_sections.js) */
+
+div#toc { padding-left: 2em; }
+a.TOCBackLink { display: none; }
+.TOCLevel3 { margin-left: 2em; }
+.TOCLevel4 { margin-left: 4em; }
+.TOCLevel5 { margin-left: 6em; }
+.TOCLevel6 { margin-left: 8em; }

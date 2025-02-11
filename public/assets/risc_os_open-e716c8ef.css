@@ -1,0 +1,111 @@
+/* This stylesheet is loaded first, then all of Instiki's styles. Apart from
+ * loading the global ROOL stylesheet, it further provides styles that can
+ * optionally give a visual impression similar to Acorn's original PRMs and
+ * Style Guide, along with ROOL's updated reprints. A few miscellaneous other
+ * fixes/modifications are included too.
+ */
+
+@import url("https://www.riscosopen.org/css/risc_os_open_2025.css");
+
+/*****************************************************************************\
+ * PRM-like fonts
+\*****************************************************************************/
+
+@font-face {
+  font-family: "PRM";
+  font-weight: normal;
+  src: local("ITC Novarese Std Book");
+}
+
+@font-face {
+  font-family: "PRM";
+  font-weight: normal;
+  font-style: italic;
+  src: local("ITC Novarese Std Book Italic");
+}
+
+@font-face {
+  font-family: "PRM";
+  font-weight: bold;
+  src: local("ITC Novarese Std Bold");
+}
+
+@font-face {
+  font-family: "PRM";
+  font-weight: bold;
+  font-style: italic;
+  src: local("ITC Novarese Std Bold Italic");
+}
+
+@font-face {
+  font-family: "PRM";
+  font-weight: 600;
+  src: local("ITC Novarese Std Medium");
+}
+
+@font-face {
+  font-family: "PRM";
+  font-weight: 600;
+  font-style: italic;
+  src: local("ITC Novarese Std Medium Italic");
+}
+
+@font-face {
+  font-family: "PRM";
+  font-weight: 900;
+  src: local("ITC Novarese Std Ultra");
+}
+
+/*****************************************************************************\
+ * PRM-like styles
+\*****************************************************************************/
+
+/* ITC Novarese is the commercial PRM font; Lora is a similar no-charge font
+ * from Google Fonts that can be used as a fallback.
+ */
+
+div.prm_style #pageTitle,
+div.prm_style #pageContent {
+  font-family: "PRM", "Lora", serif;
+  font-size: 13pt;
+}
+
+/* Similar visual impression to the grey main header underline in real PRMs */
+
+div.prm_style #pageTitle {
+  padding-bottom: 10px;
+  border-bottom: 3px solid #ddd;
+  margin-bottom: 20px;
+}
+
+/* ROOL's side-wide styles define overrides for H3 that need adjustment */
+
+div.prm_style #pageContent h3 {
+  font-family: "PRM", "Lora", serif;
+  font-weight: 600;
+  font-size: 130%;
+}
+
+/*****************************************************************************\
+ * Miscellaneous
+\*****************************************************************************/
+
+/* Ad-hoc emergence of a series of H6 navigation entries at the top of pages
+ * allows us to define a special case set of styles that catch a good many of
+ * these, providing additional visual separation between navigation and body.
+ */
+
+#pageContent h6 + *,
+#pageContent h6:first-child {
+  margin-top: 20px;
+}
+
+#pageContent h6 + h6 {
+  margin-top: 2px;
+}
+
+/* Push the time and author attribution further from the main content */
+
+#pageContent div.byline {
+  margin-top: 40px;
+}
