@@ -152,33 +152,33 @@ class URIChunk < Chunk::Abstract
 
 end
 
-# uri with mandatory scheme but less restrictive hostname, like
-# http://localhost:2500/blah.html
-class LocalURIChunk < URIChunk
-
-  unless defined? LocalURIChunk::LOCAL_URI_REGEXP
-    # hostname can be just a simple word like 'localhost'
-    ANY_HOSTNAME = "(?:#{DOMLABEL}\\.)*#{TOPLABEL}\\.?"
-
-    # The basic URI expression as a string
-    # Scheme and hostname are mandatory
-    LOCAL_URI =
-        "(?:(#{SCHEME})://)+" +       # Mandatory scheme://     (\1)
-        "(?:(#{USERINFO})@)?" +       # Optional userinfo@      (\2)
-        "(#{ANY_HOSTNAME})" +         # Mandatory hostname      (\3)
-        "(?::(#{PORT}))?" +           # Optional :port          (\4)
-        "(#{ABS_PATH})?"  +           # Optional absolute path  (\5)
-        "(?:\\?(#{QUERY}))?" +        # Optional ?query         (\6)
-        "(?:\\#(#{FRAGMENT}))?" +     # Optional #fragment      (\7)
-        '(?=\.?(?:\s|\)|\z))'         # ends only with optional dot + space or ")"
-                                      # or end of the string
-
-#    LOCAL_URI_REGEXP = Regexp.new(SUSPICIOUS_PRECEDING_CHARACTER + LOCAL_URI, Regexp::EXTENDED, 'N')
-    LOCAL_URI_REGEXP = Regexp.new(SUSPICIOUS_PRECEDING_CHARACTER + LOCAL_URI, Regexp::EXTENDED)
-  end
-
-  def LocalURIChunk.pattern
-    LOCAL_URI_REGEXP
-  end
-
-end
+# # uri with mandatory scheme but less restrictive hostname, like
+# # http://localhost:2500/blah.html
+# class LocalURIChunk < URIChunk
+#
+#   unless defined? LocalURIChunk::LOCAL_URI_REGEXP
+#     # hostname can be just a simple word like 'localhost'
+#     ANY_HOSTNAME = "(?:#{DOMLABEL}\\.)*#{TOPLABEL}\\.?"
+#
+#     # The basic URI expression as a string
+#     # Scheme and hostname are mandatory
+#     LOCAL_URI =
+#         "(?:(#{SCHEME})://)+" +       # Mandatory scheme://     (\1)
+#         "(?:(#{USERINFO})@)?" +       # Optional userinfo@      (\2)
+#         "(#{ANY_HOSTNAME})" +         # Mandatory hostname      (\3)
+#         "(?::(#{PORT}))?" +           # Optional :port          (\4)
+#         "(#{ABS_PATH})?"  +           # Optional absolute path  (\5)
+#         "(?:\\?(#{QUERY}))?" +        # Optional ?query         (\6)
+#         "(?:\\#(#{FRAGMENT}))?" +     # Optional #fragment      (\7)
+#         '(?=\.?(?:\s|\)|\z))'         # ends only with optional dot + space or ")"
+#                                       # or end of the string
+#
+# #    LOCAL_URI_REGEXP = Regexp.new(SUSPICIOUS_PRECEDING_CHARACTER + LOCAL_URI, Regexp::EXTENDED, 'N')
+#     LOCAL_URI_REGEXP = Regexp.new(SUSPICIOUS_PRECEDING_CHARACTER + LOCAL_URI, Regexp::EXTENDED)
+#   end
+#
+#   def LocalURIChunk.pattern
+#     LOCAL_URI_REGEXP
+#   end
+#
+# end
