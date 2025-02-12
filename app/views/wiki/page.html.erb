@@ -28,17 +28,21 @@
   </div>
 </div>
 
-<div class="navigation navfoot">
-  <%= raw navigation_menu_for_page.join(' | ') %>
-  <span class="views space_above">
-    Views:
-    <%= link_to('Print',
-            { :web => @web.address, :action => 'print', :id => @page.name },
-            { :accesskey => 'p', :id => 'view_print', :rel => 'nofollow' }) %>
-    |
-    <%= link_to 'Source', {:web => @web.address, :action => 'source', :id => @page.name},
-            {:id => 'view_source', :rel => 'nofollow' } %>
-  </span>
+<div class="simple_flex_row with_moderation_info space_between">
+  <div class="navigation navfoot">
+    <%= raw navigation_menu_for_page.join(' | ') %>
+    <span class="views space_above">
+      Views:
+      <%= link_to('Print',
+              { :web => @web.address, :action => 'print', :id => @page.name },
+              { :accesskey => 'p', :id => 'view_print', :rel => 'nofollow' }) %>
+      |
+      <%= link_to 'Source', {:web => @web.address, :action => 'source', :id => @page.name},
+              {:id => 'view_source', :rel => 'nofollow' } %>
+    </span>
 
-  <%= render :partial => 'inbound_links' %>
+    <%= render :partial => 'inbound_links' %>
+  </div>
+  <div>&nbsp;&nbsp;&nbsp;</div>
+  <%= render partial: 'shared/ask_a_moderator' %>
 </div>
