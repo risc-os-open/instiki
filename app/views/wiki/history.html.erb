@@ -20,7 +20,6 @@
       <div class="byline" style="margin-bottom: 0px">
         by <%= link_to_page(rev.author) %>
         at <%= format_date(rev.revised_at) %>
-        <%= "from #{rev.author.ip}" if rev.author.respond_to?(:ip) %>
       </div>
     </li>
   <% end %>
