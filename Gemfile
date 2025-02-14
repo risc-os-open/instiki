@@ -34,7 +34,7 @@ gem 'propshaft', '~> 1.1'
 
 # Use Hub for authentication [https://github.com/pond/hubssolib]
 #
-gem 'hubssolib', '~> 3.0', require: 'hub_sso_lib'
+gem 'hubssolib', '~> 3.1', require: 'hub_sso_lib'
 
 # Easy pagination [https://rubygems.org/gems/pagy]
 #
