@@ -29,12 +29,14 @@ namespace :deploy do
     if newest_asset_updated_at.nil?
       abort('ERROR: Could not determine asset age! Assets may be missing?')
     elsif newest_asset_updated_at > manifest_updated_at
-      abort('ERROR: Production assets are outated; run "rake assets:productionize"')
+      abort('ERROR: Production assets are outated; run "bin/build"')
     end
 
     puts('...Done. Precompiled assets are up to date.')
   end
 
+  # A shortcut for this configured for the ROOL layout is in "bin/build".
+  #
   desc 'Clobber and precompile assets for Production and a given relative URL root, regardless of current RAILS_ENV'
   task :build, [:url_root] => :environment do | t, args |
     if args[:url_root].nil?
@@ -43,8 +45,8 @@ namespace :deploy do
       puts '       so that compiled URLs are built correctly. If you want to'
       puts '       serve from the actual root, pass an empty string. E.g.:'
       puts
-      puts '         bundle exec rake \'assets:productionize[forum]\''
-      puts '         bundle exec rake \'assets:productionize[""]\''
+      puts '         bundle exec rake \'deploy:build[forum]\''
+      puts '         bundle exec rake \'deploy:build[""]\''
       puts
       abort('       Halting.')
     end
